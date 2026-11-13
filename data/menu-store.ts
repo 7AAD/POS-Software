@@ -1,6 +1,7 @@
 import type { Database } from './database-types';
 import type { Category, CategoryInput, MenuItem, MenuItemInput } from './menu-types';
 import { requiredText, validateMenuItem } from './menu-validation';
+import { readOrderOptions } from './order-options-validation';
 
 interface ItemRow {
   id: string;
@@ -10,6 +11,7 @@ interface ItemRow {
   description: string;
   premiumExtraRequired: number;
   premiumExtraPaisa: number | null;
+  orderOptionsJson: string | null;
   variantId: string;
   variantName: string;
   pricePaisa: number;
@@ -40,6 +42,7 @@ export function createMenuStore(database: Database) {
         SELECT item.id, item.category_id AS categoryId, item.name, item.active,
           item.description, item.premium_extra_required AS premiumExtraRequired,
           item.premium_extra_paisa AS premiumExtraPaisa,
+          item.order_options_json AS orderOptionsJson,
           variant.id AS variantId, variant.name AS variantName,
           variant.price_paisa AS pricePaisa
         FROM menu_items AS item
@@ -55,6 +58,7 @@ export function createMenuStore(database: Database) {
             active: row.active === 1, variants: [],
             description: row.description, premiumExtraRequired: row.premiumExtraRequired === 1,
             premiumExtraPaisa: row.premiumExtraPaisa,
+            ...(row.orderOptionsJson ? { orderOptions: readOrderOptions(row.orderOptionsJson) } : {}),
           };
           items.set(row.id, item);
         }
@@ -73,6 +77,7 @@ export function createMenuStore(database: Database) {
         description: input.description?.trim() ?? '',
         premiumExtraRequired: input.premiumExtraRequired ?? false,
         premiumExtraPaisa: input.premiumExtraPaisa ?? null,
+        ...(input.orderOptions ? { orderOptions: structuredClone(input.orderOptions) } : {}),
         variants: input.variants.map(variant => ({
           id: variant.id === undefined ? crypto.randomUUID() : requiredText(variant.id, 'Size ID'),
           name: requiredText(variant.name, 'Size name'),
@@ -82,14 +87,16 @@ export function createMenuStore(database: Database) {
       await database.write([
         {
           statement: `INSERT INTO menu_items(id, category_id, name, active, description,
-              premium_extra_required, premium_extra_paisa, sort_order)
-            VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM menu_items))
+              premium_extra_required, premium_extra_paisa, order_options_json, sort_order)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM menu_items))
             ON CONFLICT(id) DO UPDATE SET category_id = excluded.category_id,
               name = excluded.name, active = excluded.active, description = excluded.description,
               premium_extra_required = excluded.premium_extra_required,
-              premium_extra_paisa = excluded.premium_extra_paisa`,
+              premium_extra_paisa = excluded.premium_extra_paisa,
+              order_options_json = excluded.order_options_json`,
           values: [item.id, item.categoryId, item.name, Number(item.active), item.description,
-            Number(item.premiumExtraRequired), item.premiumExtraPaisa],
+            Number(item.premiumExtraRequired), item.premiumExtraPaisa,
+            item.orderOptions ? JSON.stringify(item.orderOptions) : null],
         },
         { statement: 'DELETE FROM menu_variants WHERE item_id = ?', values: [item.id] },
         ...item.variants.map((variant, index) => ({

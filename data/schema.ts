@@ -1,6 +1,6 @@
 import type { Database } from './database-types';
 
-export const schemaVersion = 3;
+export const schemaVersion = 4;
 
 const initialSchema = [
   `CREATE TABLE schema_migrations (
@@ -68,6 +68,12 @@ export async function initializeSchema(database: Database): Promise<void> {
       { statement: 'UPDATE menu_items SET sort_order = rowid', values: [] },
       { statement: 'UPDATE menu_variants SET sort_order = rowid', values: [] },
       { statement: 'INSERT INTO schema_migrations(version) VALUES (3)', values: [] },
+    ]);
+  }
+  if (current.version <= 3) {
+    await database.write([
+      { statement: 'ALTER TABLE menu_items ADD COLUMN order_options_json TEXT', values: [] },
+      { statement: 'INSERT INTO schema_migrations(version) VALUES (4)', values: [] },
     ]);
   }
 }

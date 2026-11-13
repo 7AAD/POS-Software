@@ -1,3 +1,5 @@
+import type { OrderOptions } from './order-option-types';
+
 export interface Category {
   id: string;
   name: string;
@@ -18,6 +20,7 @@ export interface MenuItem {
   premiumExtraRequired: boolean;
   premiumExtraPaisa: number | null;
   variants: MenuVariant[];
+  orderOptions?: OrderOptions;
 }
 
 export interface CategoryInput {
@@ -34,4 +37,5 @@ export interface MenuItemInput {
   premiumExtraRequired?: boolean;
   premiumExtraPaisa?: number | null;
   variants: { id?: string; name: string; pricePaisa: number }[];
+  orderOptions?: OrderOptions | null;
 }

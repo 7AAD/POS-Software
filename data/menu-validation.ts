@@ -1,4 +1,5 @@
 import type { MenuItemInput } from './menu-types';
+import { validateOrderOptions } from './order-options-validation';
 
 export function requiredText(value: string, label: string): string {
   if (typeof value !== 'string' || !value.trim() || value.trim().length > 100) {
@@ -10,6 +11,12 @@ export function requiredText(value: string, label: string): string {
 export function validateMenuItem(input: MenuItemInput): void {
   requiredText(input.name, 'Item name');
   requiredText(input.categoryId, 'Category');
+  if (input.orderOptions != null) {
+    validateOrderOptions(input.orderOptions);
+    if (!input.premiumExtraRequired && input.orderOptions.groups.some(group => group.options.some(option => option.premium))) {
+      throw new Error('Enable premium extras or remove Premium marks from the order choices.');
+    }
+  }
   if (input.description !== undefined &&
       (typeof input.description !== 'string' || input.description.length > 1000)) {
     throw new Error('Details must contain at most 1,000 characters.');

@@ -41,10 +41,11 @@ it('upgrades version-two menus to persistent ordering without resetting owner ch
     const original = (await store.listMenuItems())[0];
     await store.saveMenuItem({ ...original, name: 'ZZ Owner Burger', variants: [{ ...original.variants[0], pricePaisa: 99900 }] });
     const before = await store.listMenuItems();
-    // Remove only the v3 ordering metadata to reproduce a real v2 database.
+    // Remove later metadata to reproduce a real v2 database.
     await database.write([
       ...['categories', 'menu_items', 'menu_variants'].map(table => ({ statement: `ALTER TABLE ${table} DROP COLUMN sort_order`, values: [] })),
-      { statement: 'DELETE FROM schema_migrations WHERE version = 3', values: [] },
+      { statement: 'ALTER TABLE menu_items DROP COLUMN order_options_json', values: [] },
+      { statement: 'DELETE FROM schema_migrations WHERE version >= 3', values: [] },
     ]);
     await initializeSchema(database);
     await importInitialMenu(database);

@@ -24,6 +24,8 @@ it('upgrades a version-one database without losing owner items or prices', async
       description: '', premiumExtraRequired: false, premiumExtraPaisa: null,
       variants: [{ id: 'owner-size', name: 'Regular', pricePaisa: 12345 }],
     }]);
-    expect(await database.query('SELECT version FROM schema_migrations ORDER BY version')).toEqual([{ version: 1 }, { version: 2 }, { version: 3 }]);
+    expect(await database.query('SELECT version FROM schema_migrations ORDER BY version')).toEqual([
+      { version: 1 }, { version: 2 }, { version: 3 }, { version: 4 },
+    ]);
   } finally { database.close(); }
 });
