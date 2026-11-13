@@ -55,7 +55,7 @@ export function Order({ cart }: { cart: OrderCartState }) {
             </StatusCard>}
             {!menu.loading && !menu.error && <>
               <SelectionTabs label="Menu categories" className="category-tabs" value={activeCategory}
-                options={[...menu.categories.map(category => ({ value: category.id, label: category.name })), { value: 'all', label: 'All' }]}
+                options={[{ value: 'all', label: 'All' }, ...menu.categories.map(category => ({ value: category.id, label: category.name }))]}
                 onChange={value => { setCategoryId(value); setQuery(''); viewport.current?.scrollTo(0, 0); }} />
               <p role="status" className="sr-only">{notice || `${visible.length} menu items`}</p>
               <div ref={viewport} className="order-menu-viewport" role="region" aria-label="Menu items" tabIndex={0}>
