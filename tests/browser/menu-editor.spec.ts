@@ -37,12 +37,14 @@ test('items can be added and their named sizes edited or removed', async ({ page
   await dialog.getByLabel('Price for Large', { exact: true }).fill('650');
   await dialog.getByRole('button', { name: 'Save item', exact: true }).click();
   const item = page.getByRole('article', { name: 'Test Pizza', exact: true });
+  await expect(dialog).not.toBeVisible();
   await expect(item).toContainText('Rs. 350');
   await expect(item).toContainText('Rs. 650');
   await item.getByRole('button', { name: 'Edit Test Pizza', exact: true }).click();
   await dialog.getByRole('button', { name: 'Remove Small size', exact: true }).click();
   await dialog.getByLabel('Price for Large', { exact: true }).fill('675');
   await dialog.getByRole('button', { name: 'Save item', exact: true }).click();
+  await expect(dialog).not.toBeVisible();
   await page.reload();
   await expect(item).toContainText('Rs. 675');
   await expect(item).not.toContainText('Small');
@@ -86,6 +88,7 @@ test('deal contents and premium extras are editable without guessing a fee', asy
   await dialog.getByLabel('Premium extra (Rs.)', { exact: true }).fill('75');
   await dialog.getByLabel('Details / deal contents', { exact: true }).fill('Owner-edited pizza deal');
   await dialog.getByRole('button', { name: 'Save item', exact: true }).click();
+  await expect(dialog).not.toBeVisible();
   await page.reload();
   await expect(deal).toContainText('Owner-edited pizza deal');
   await expect(deal).toContainText('Rs. 75');

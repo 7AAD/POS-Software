@@ -17,6 +17,7 @@ test('the built home and SQLite engine work under the GitHub Pages path', async 
   const dialog = page.getByRole('dialog', { name: 'Edit menu item' });
   await dialog.getByLabel('Price for Regular', { exact: true }).fill('145');
   await dialog.getByRole('button', { name: 'Save item', exact: true }).click();
+  await expect(dialog).not.toBeVisible();
   await page.reload();
   await expect(item).toContainText('Rs. 145');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
