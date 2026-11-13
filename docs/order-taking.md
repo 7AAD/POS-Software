@@ -16,7 +16,8 @@ category chips, two-column food cards, and Current Order below the menu on phone
 Scroll the cards to find more items. The header's search button searches the whole
 menu; its person button opens customer and table details. Bottom navigation opens
 Home, POS, Orders, and Menu. Save order keeps the cart on this device;
-payment comes in the checkout segment. See [saving and reopening orders](open-orders.md).
+Checkout saves it and opens payment review. See [open orders](open-orders.md)
+and [checkout](checkout.md).
 
 1. Choose Shami Burger, add an instruction, and increase quantity to two.
    The total should be Rs. 280. Add the same selection/instruction again:
@@ -69,8 +70,9 @@ unfinished and has not been paid or completed.
 
 Saved open orders survive closing or reloading; reopen them from Orders. Unsaved
 drafts and edits stay in memory, and browsers warn before leaving where supported.
-Payment, receipts, discounts, tax, delivery charges, addresses, and staff access
-remain future tasks. Native behavior still needs a test on the shop's Android phone.
+Checkout supports the four agreed payment methods. Receipts, discounts, tax,
+delivery charges, addresses, and staff access remain future tasks. Native behavior
+still needs a test on the shop's Android phone.
 
 ## Automated checks
 

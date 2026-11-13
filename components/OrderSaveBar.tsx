@@ -18,12 +18,25 @@ export function OrderSaveBar({ cart, onNew }: { cart: OrderCartState; onNew(): v
       setError(orderErrorMessage(failure, 'Could not save this order. Your changes are still here. Please try again.'));
     }
   }
+  async function checkout() {
+    setError(''); setMessage('');
+    try {
+      const order = await cart.save();
+      window.location.hash = `#checkout/${encodeURIComponent(order.id)}`;
+    } catch (failure) {
+      setError(orderErrorMessage(failure, 'Could not save the order for checkout. Your current changes are still here.'));
+    }
+  }
   return (
     <div className="order-save-bar">
-      <button type="button" className="order-review" aria-label={label}
+      <div className="checkout-entry-actions">
+      <button type="button" className="order-review secondary" aria-label={label}
         disabled={cart.busy || cart.lines.length === 0 || saved} onClick={() => void save()}>
-        {cart.busy ? 'Please wait…' : label} · {formatPkr(cart.totalPaisa)}
+        {cart.busy ? 'Please wait…' : label}
       </button>
+      <button type="button" className="order-review" aria-label="Checkout" disabled={cart.busy || cart.lines.length === 0}
+        onClick={() => void checkout()}>Checkout · {formatPkr(cart.totalPaisa)}</button>
+      </div>
       <div className="order-secondary-actions">
         <button type="button" className="secondary" disabled={cart.busy} onClick={onNew}><AppIcon name="plus" />New order</button>
         <a className="button-link secondary" href="#orders"><AppIcon name="clock" />Open orders</a>

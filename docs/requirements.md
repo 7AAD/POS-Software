@@ -41,6 +41,9 @@
 - Optional table number; customer name and phone number.
 - Keep open orders, switch between them, and add items later.
 - Payment can happen before or after preparation.
+- Accepted methods: Cash, JazzCash, Easypaisa, and bank transfer. Record the full
+  payment using one method; cash supports change. Digital receipts are confirmed
+  manually in the provider/bank app before recording them in POS.
 - Currency: PKR. Store monetary amounts as integer paisa.
 - Percentage and fixed-PKR discounts; either menu-wide or on selected items.
 - One discount type at a time, with no stacking.
@@ -61,7 +64,7 @@
 - Exact cashier permissions and owner PIN setup/recovery rules.
 - Whether an individual-item promotion excludes a menu-wide promotion for the
   entire menu or only the affected item; never combine discounts on one item.
-- Supported payment methods and delivery address/charge requirements.
+- Delivery address/charge requirements.
 - Printer model, paper width, and connection type.
 - Cloud backup provider, schedule, and recovery process.
 - Confirmed tax rules, rounding, and any payment-method-dependent tax rates.
@@ -87,9 +90,16 @@ Save changes updates that order; New order starts a separate draft. Switching
 offers save, discard, or keep editing when needed. Clearing a working cart keeps
 the saved copy. Successful storage commits alone mark the current copy saved.
 
-Unsaved drafts and edits remain in memory. Open orders are not paid/completed
-sales. Add-ons, permissions, discounts, tax, checkout, and backups remain separate
-tasks. Future sales records must retain the same snapshots.
+Unsaved drafts and edits remain in memory. Checkout saves them before reviewing
+the current total. Recording payment stores an immutable sale snapshot and marks
+the source order paid in one transaction. Paid orders leave the open/unpaid list
+and are available under Orders → Paid orders, with their payment method, received
+amount, cash change, reference, and timestamp. Retrying cannot create another
+payment for the same order. Paid records cannot be reopened for editing.
+
+Checkout records financial payment; preparation/delivery tracking remains separate.
+No tax rate, discount, delivery charge, or premium amount has been invented.
+Add-ons, permissions, discounts, tax, receipts, and backups remain separate tasks.
 
 The owner requested Git separation through the final segment: keep work on
 `feature/order-taking`, commit completed stages, and leave merging to `main`

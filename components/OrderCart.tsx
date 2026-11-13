@@ -4,6 +4,7 @@ import { formatPkr } from '../data/money';
 import { AppIcon } from './AppIcon';
 import { Modal } from './Modal';
 import { QuantityControl } from './QuantityControl';
+import { OrderLineDetails } from './OrderLineDetails';
 
 export function OrderCart({ cart }: { cart: OrderCartState }) {
   const [error, setError] = useState('');
@@ -21,12 +22,7 @@ export function OrderCart({ cart }: { cart: OrderCartState }) {
               <button type="button" className="icon-button secondary" aria-label={`Remove ${line.itemName} ${line.variantName}`}
                 onClick={() => { cart.remove(line.id); setError(''); }}><AppIcon name="remove" /></button>
             </div>
-            {line.description && <p className="cart-contents">{line.description}</p>}
-            {line.choices.length > 0 && <ul className="cart-choices">
-              {line.choices.map((choice, index) => <li key={index}>{choice.label}: {choice.name}{choice.premium ? ' (premium)' : ''}</li>)}
-            </ul>}
-            {line.premiumPaisa > 0 && <p className="premium-note">Includes {formatPkr(line.premiumPaisa)} premium extras per bundle.</p>}
-            {line.notes && <p className="cart-instructions">Note: {line.notes}</p>}
+            <OrderLineDetails line={line} />
             <div className="cart-line-bottom">
               <QuantityControl name={`${line.itemName} ${line.variantName}`} quantity={line.quantity}
                 onChange={quantity => {

@@ -38,12 +38,15 @@ prices afterward. Amounts have not been invented or changed by this feature.
 - **Unsaved:** this copy has edits that still need saving.
 - **New order:** starts a separate cart. Save/discard choices protect unfinished edits.
 - **Orders:** lists saved open orders and opens them in POS.
+- **Checkout:** saves the current copy and opens payment review.
+- **Paid orders:** lists read-only completed sales after payment is recorded.
 - **Clear order:** clears the working cart; saved orders stay in the list.
 
 Unsaved drafts and edits are not automatically restored after closing. Save first.
 On restart the app opens a fresh workspace; use Orders to reopen a saved order.
-Saving an open order does not take payment, print a receipt, or count it as a
-completed sale. Closing/cancelling paid orders belongs to checkout and later tasks.
+Saving keeps an unfinished order. Use Checkout to record payment; the paid order
+then moves to Paid orders. Preparation tracking, cancellation/refunds, and printing
+remain separate tasks.
 Orders are local to this installation, with the same browser/Android separation
 as the menu. Backups and multiple-device synchronization remain future work.
 
@@ -54,6 +57,7 @@ stores customer details, the complete line snapshots, total in integer paisa,
 order number, revision, and created/updated times. Numbers are local to the device.
 Menu IDs are references inside snapshots, so deleting a menu size cannot delete
 or reprice an earlier order.
+Version 6 adds payment records and a paid status while preserving these orders.
 
 The complete order updates in one transaction. A failed SQLite write or browser
 snapshot save leaves both the prior saved order and the working cart intact.

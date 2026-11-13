@@ -32,6 +32,10 @@ section at a time: discuss, agree, build, test, then improve.
   from Orders. Keep multiple orders, add items later, and update the same order.
 - Saved/unsaved indicators and save/discard choices before switching orders.
   Failed saves keep the draft and the last saved copy available.
+- Checkout records Cash, JazzCash, Easypaisa, and bank-transfer payments offline.
+  Cash calculates change; digital receipts require the cashier's confirmation.
+- Paid orders keep a read-only completed sale with all item choices, prices,
+  customer details, payment amounts, references, and time. Reopen it after restart.
 
 The reviewed menu imports once per device. Existing owner entries win when
 names match, and later edits are never reset by reopening or updating the app.
@@ -41,9 +45,12 @@ cost extra per premium pizza. Unpriced premium choices cannot be ordered.
 Tap Save order before closing or reloading. Saved orders retain their customer
 details, instructions, choices, and prices; reopen them through Orders.
 Later edits need Save changes. Unfinished unsaved edits stay only while the app
-is open. Login, checkout, payments, printing, and backups remain future tasks.
+is open. Checkout saves the current cart before reviewing payment. Digital money
+is confirmed in the provider/bank app and recorded here. Login, receipt printing,
+discounts, tax, and backups remain future tasks.
 See the [order-taking checks](docs/order-taking.md) and
 [saved-order test steps](docs/open-orders.md).
+See [checkout and payment checks](docs/checkout.md) for the payment flow.
 See [the agreed requirements](docs/requirements.md) for the longer-term scope.
 
 ## Git work in progress
@@ -55,6 +62,8 @@ does not deploy GitHub Pages. The Android workflow can be run manually on this
 branch to download a test APK without merging or publishing the website.
 The completed previous section is saved at Git tag
 [`checkpoint/order-taking-efd3b23`](https://github.com/7AAD/POS-Software/tree/checkpoint/order-taking-efd3b23).
+The open-orders section is preserved at
+[`checkpoint/open-orders-cb22f0d`](https://github.com/7AAD/POS-Software/tree/checkpoint/open-orders-cb22f0d).
 
 ## Run the development version
 
@@ -154,8 +163,9 @@ data removes it. No cloud or file backups exist yet.
 
 - `AGENTS.md`: the exact project rules for future Codex tasks.
 - `index.html` and `main.tsx`: start React and open the home screen.
-- `App.tsx`: selects Home, Menu, POS, or Orders and keeps the working draft.
-- `pages/`: one file per screen: `Home.tsx`, `Menu.tsx`, `Order.tsx`, and `OpenOrders.tsx`.
+- `App.tsx`: selects each screen by hash navigation and keeps the working draft.
+- `pages/`: Home, Menu, POS, Open Orders, Checkout, Paid Orders, and the completed
+  Sale view. Each screen has its own file.
 - `components/`: shared UI and styling, including `StatusCard.tsx` and `styles.css`.
 - `data/`: all loading and saving logic. `schema.ts` defines the database;
   `menu-store.ts` provides menu operations; `money.ts` handles PKR conversion.
@@ -167,6 +177,10 @@ data removes it. No cloud or file backups exist yet.
   database. `saved-order-validation.ts` checks their stored snapshots and totals.
 - `data/use-order-cart.ts` and `use-order-navigation.ts`: manage the working draft,
   saved/unsaved state, and safe switching between orders.
+- `data/sales-store.ts`: atomically records one payment and closes its open order.
+  `payment-validation.ts` checks received amounts, change, and digital confirmation.
+- `components/OrderReview.tsx`, `OrderLineDetails.tsx`, and `SaleSummary.tsx`:
+  shared order and payment details for checkout and completed sales.
 - `data/catalog/`: the reviewed initial menu. `import-initial-menu.ts` saves it
   atomically once per database; `menu-source.csv` records the photo transcription.
 - `tests/data/`: tests the actual schema, menu rules, persistence, and PKR amounts.
@@ -212,9 +226,9 @@ Discuss each feature before starting it. One numbered feature per Codex task:
 5. [x] Open orders: save, reopen, and update unfinished orders.
 6. [ ] Discounts: owner-approved item or menu-wide promotions, with no stacking.
 7. [ ] Tax settings: optional Punjab tax applied after discounts, using verified rules.
-8. [ ] Payments: pay before or after preparation using the agreed payment methods.
+8. [x] Checkout and payments: Cash, JazzCash, Easypaisa, and bank transfer.
 9. [ ] Receipts: print completed orders using the chosen printer connection.
-10. [ ] Sales history: review completed sales and payment status.
+10. [ ] Sales history: filtering and reporting; a basic paid-order list now works.
 11. [ ] File backups: export and safely restore the local database.
 12. [ ] Cloud backups: back up and restore when connected.
 13. [ ] Daily report: summarize sales and transaction counts.
