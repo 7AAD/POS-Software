@@ -29,6 +29,11 @@
   portion counts. Premium pizza costs extra; the actual amount is not yet given.
 - Existing imported items must remain editable. Initial imports must not replace
   owner edits or matching existing owner entries.
+- Deal base flavours: Tikka, Fajita, Vegetable. Premium: Supreme, Malai Boti
+  (called Malai by the owner), Crown Crust, Kababish, Kabab Crust, Cheese Crust,
+  Lazania. Charge the configured extra for each premium pizza, not once per deal.
+- Offer only sizes present in the linked menu. The premium amount for each deal
+  stays unset until the owner enters it.
 
 ## Orders and money
 
@@ -61,7 +66,7 @@
 - Cloud backup provider, schedule, and recovery process.
 - Confirmed tax rules, rounding, and any payment-method-dependent tax rates.
 
-## Implemented foundation and menu editor
+## Implemented foundation, menu editor, and order taking
 
 The runtime, versioned database, menu storage API, and menu editor are implemented.
 Categories have names. Items belong to a category and have names, availability,
@@ -69,7 +74,17 @@ and one or more named sizes with prices. Item edits and their sizes are atomic.
 The home screen shows storage status/counts and opens the menu editor. The editor
 supports names, categories, sizes/prices, availability, contents, and optional
 premium charges. Imports and upgrades preserve owner data. Premium charges are
-unset until supplied; no charge amount or pricing formula has been inferred.
-Add-ons, structured deals, permissions, orders, discounts, tax, and backups will be designed
-in their own tasks. Later order records must keep a snapshot of sale-time names
-and prices so menu edits cannot rewrite past sales.
+unset until supplied; the owner confirmed the per-pizza formula in this task.
+The Order screen supports sizes, instructions, editable deal choice groups,
+quantities, exact totals, and optional customer/table details. It keeps a snapshot
+of each added item's name, price, contents, and chosen options. Matching lines
+combine only when these snapshots and instructions are identical.
+
+Current drafts stay through in-app navigation, but are not saved across closing
+or reloading. Persistent open orders, add-ons, permissions, discounts, tax,
+checkout, and backups remain separate tasks. Future order records must retain
+the same snapshots so menu edits cannot rewrite past sales.
+
+The owner requested Git separation through the final segment: keep work on
+`feature/order-taking`, commit completed stages, and leave merging to `main`
+and publishing until that final segment is agreed complete.

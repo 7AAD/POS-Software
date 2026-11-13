@@ -19,14 +19,30 @@ section at a time: discuss, agree, build, test, then improve.
   at least one size; use `Regular` when it has only one price.
 - Exact PKR amounts stored as integer paisa: PKR 150.50 is saved as `15050`.
 - Validation and transactions: an invalid edit leaves the previous menu intact.
+- An order-taking screen: search the grouped menu, select sizes and deal choices,
+  add instructions, change quantities, and see exact PKR totals.
+- Dine-in, takeaway, and delivery drafts with optional customer/phone/table details.
+- Editable deal choice groups, linked menu availability, and a premium charge for
+  each premium pizza. Existing cart lines keep their added names and prices.
 
 The reviewed menu imports once per device. Existing owner entries win when
 names match, and later edits are never reset by reopening or updating the app.
-Premium pizza extras on Deals 7–12 are marked as required but have no invented
-amount: set the extra in the item editor when agreed. Deal prices are base prices;
-there is no checkout or automatic premium selection/calculation yet.
-Login, orders, payments, printer integration, and backups remain future tasks.
+Premium pizza extras on Deals 7–12 have no invented amount: set the extra in the
+item editor. Tikka, Fajita, and Vegetable are included; the other reviewed flavours
+cost extra per premium pizza. Unpriced premium choices cannot be ordered.
+Draft carts stay while navigating within the app; closing or reloading clears
+them. Saving/reopening orders, login, checkout, payments, printing, and backups
+remain future tasks. [Order-taking test steps](docs/order-taking.md) explain how
+to check this segment and its limits.
 See [the agreed requirements](docs/requirements.md) for the longer-term scope.
+
+## Git work in progress
+
+Order-taking and the remaining ordering segments stay on `feature/order-taking`,
+with commits for completed stages. Keep `main` and the published preview at their
+current version until the final segment is agreed complete. Pushing this branch
+does not deploy GitHub Pages. The Android workflow can be run manually on this
+branch to download a test APK without merging or publishing the website.
 
 ## Run the development version
 
@@ -86,7 +102,7 @@ alone does not push these project files to GitHub.
 
 1. Sign in to GitHub and open `7AAD/POS-Software`.
 2. Open **Actions → Build Android APK**. A push to `main` starts a build;
-   you can also select **Run workflow** to start one manually.
+   for the current segment, select **Run workflow → feature/order-taking**.
 3. Open the completed run with a green check mark.
 4. Under **Artifacts**, download **master-foods-debug**.
 5. Extract the downloaded ZIP and install `app-debug.apk` on your Android phone.
@@ -126,17 +142,20 @@ data removes it. No cloud or file backups exist yet.
 
 - `AGENTS.md`: the exact project rules for future Codex tasks.
 - `index.html` and `main.tsx`: start React and open the home screen.
-- `App.tsx`: selects the Home or Menu screen using hash navigation.
-- `pages/`: one file per screen: `Home.tsx` and the menu editor in `Menu.tsx`.
+- `App.tsx`: selects Home, Menu, or Order with hash navigation and keeps the draft.
+- `pages/`: one file per screen: `Home.tsx`, `Menu.tsx`, and `Order.tsx`.
 - `components/`: shared UI and styling, including `StatusCard.tsx` and `styles.css`.
 - `data/`: all loading and saving logic. `schema.ts` defines the database;
   `menu-store.ts` provides menu operations; `money.ts` handles PKR conversion.
   `database.ts` selects the Android or browser storage adapter.
+- `data/order-pricing.ts` and `order-cart.ts`: validate selections, count premium
+  pizzas, keep price snapshots, and calculate totals without decimal rounding.
+- `data/import-order-options.ts`: adds reviewed deal choices once, preserving edits.
 - `data/catalog/`: the reviewed initial menu. `import-initial-menu.ts` saves it
   atomically once per database; `menu-source.csv` records the photo transcription.
 - `tests/data/`: tests the actual schema, menu rules, persistence, and PKR amounts.
-- `tests/browser/`: checks startup, importing, editing, category management,
-  offline writes, and persistence after reloads.
+- `tests/browser/`: checks startup, menu editing/persistence, and taking orders
+  offline, including premium fees and drafts kept through navigation.
 - `android/`: Capacitor's native Android project. Generated web assets are ignored.
 - `.github/workflows/`: builds a downloadable test APK in GitHub Actions.
 - `docs/`: agreed requirements and decisions still to discuss.
@@ -171,9 +190,9 @@ paths that a development-server test would miss. It also needs Python 3.
 Discuss each feature before starting it. One numbered feature per Codex task:
 
 1. [x] Menu editor: manage categories, items, sizes, prices, and availability.
-2. [ ] Menu customization: configure add-ons and structured meal-deal choices.
+2. [ ] Menu customization: priced add-ons; structured deal choices now work.
 3. [ ] Staff access: owner and cashier roles with offline owner PIN approval.
-4. [ ] Order taking: dine-in, takeaway, and delivery carts with customer details.
+4. [x] Order taking: dine-in, takeaway, and delivery carts with customer details.
 5. [ ] Open orders: save, reopen, and update unfinished orders.
 6. [ ] Discounts: owner-approved item or menu-wide promotions, with no stacking.
 7. [ ] Tax settings: optional Punjab tax applied after discounts, using verified rules.

@@ -120,6 +120,11 @@ prices are recorded only as reference, not as an automatic discount.
 3. Keep Zinger Shawarmas as written in Deals 5 and 6, without adding a size.
 4. Premium pizza costs extra. The amount is unset and editable, not guessed.
 5. Already entered items must also be editable.
+6. Base pizza flavours are Tikka, Fajita, and Vegetable. Premium flavours are
+   Supreme, Malai Boti (owner: Malai), Crown Crust, Kababish, Kabab Crust,
+   Cheese Crust, and Lazania.
+7. Charge the extra for each premium pizza. Multiply the resulting bundle price
+   by the ordered bundle quantity. Do not charge standalone pizza prices in deals.
 
 NR already means a configurable 250 ml or 350 ml drink. That decision is
 preserved; no new default or extra charge has been assumed.
@@ -133,4 +138,9 @@ The reviewed catalog imports in one transaction, with a permanent import marker.
 Reopening or updating the app does not overwrite owner edits or repeat imports.
 Matching pre-existing owner items retain their IDs and prices. Menu items,
 sizes/prices, categories, availability, and deal contents stay editable.
-Deal contents are text; structured choices and billing belong to later tasks.
+Deal contents remain editable text. Order choices are also editable in each
+item's editor. A separate, atomic import adds the reviewed pizza counts/sizes and
+NR choices once, only to deals whose contents and premium rule still match.
+It preserves owner prices/extras and never restores removed or changed choices.
+Linked choices follow the source item's name and availability; removed menu sizes
+become unavailable. Changed deal contents need their choices reviewed manually.
