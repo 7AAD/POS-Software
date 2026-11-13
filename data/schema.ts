@@ -1,6 +1,6 @@
 import type { Database } from './database-types';
 
-export const schemaVersion = 5;
+export const schemaVersion = 6;
 
 const initialSchema = [
   `CREATE TABLE schema_migrations (
@@ -89,6 +89,28 @@ export async function initializeSchema(database: Database): Promise<void> {
           updated_at TEXT NOT NULL
         )`, values: [] },
       { statement: 'INSERT INTO schema_migrations(version) VALUES (5)', values: [] },
+    ]);
+  }
+  if (current.version <= 5) {
+    await database.write([
+      { statement: "ALTER TABLE open_orders ADD COLUMN status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'paid'))", values: [] },
+      { statement: `CREATE TABLE sales (
+          id TEXT PRIMARY KEY NOT NULL,
+          order_id TEXT NOT NULL UNIQUE REFERENCES open_orders(id) ON DELETE RESTRICT,
+          order_number INTEGER NOT NULL,
+          order_revision INTEGER NOT NULL,
+          details_json TEXT NOT NULL,
+          lines_json TEXT NOT NULL,
+          total_paisa INTEGER NOT NULL CHECK(typeof(total_paisa) = 'integer' AND total_paisa BETWEEN 0 AND 9007199254740991),
+          method TEXT NOT NULL CHECK(method IN ('cash', 'jazzcash', 'easypaisa', 'bank-transfer')),
+          received_paisa INTEGER NOT NULL CHECK(typeof(received_paisa) = 'integer' AND received_paisa BETWEEN total_paisa AND 9007199254740991),
+          change_paisa INTEGER NOT NULL CHECK(typeof(change_paisa) = 'integer' AND change_paisa = received_paisa - total_paisa),
+          confirmed_received INTEGER NOT NULL CHECK(confirmed_received IN (0, 1)),
+          reference TEXT NOT NULL,
+          paid_at TEXT NOT NULL,
+          CHECK(method = 'cash' OR (received_paisa = total_paisa AND confirmed_received = 1))
+        )`, values: [] },
+      { statement: 'INSERT INTO schema_migrations(version) VALUES (6)', values: [] },
     ]);
   }
 }

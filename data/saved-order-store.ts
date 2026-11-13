@@ -1,6 +1,7 @@
 import type { Database } from './database-types';
 import { cartTotal } from './order-cart';
-import { OrderConflictError, OrderValidationError } from './order-error';
+import { OrderConflictError, OrderPaidError, OrderValidationError } from './order-error';
+import { readOrderSnapshot } from './order-snapshot';
 import { validateOrderDetails, validateOrderLines } from './saved-order-validation';
 import type { SavedOrder, SaveOrderInput } from './saved-order-types';
 
@@ -13,15 +14,13 @@ interface OrderRow {
   total_paisa: number;
   created_at: string;
   updated_at: string;
+  status: 'open' | 'paid';
 }
 
 function readOrder(row: OrderRow): SavedOrder {
-  const details: unknown = JSON.parse(row.details_json);
-  const lines: unknown = JSON.parse(row.lines_json);
-  validateOrderDetails(details);
-  validateOrderLines(lines);
-  const totalPaisa = cartTotal(lines);
-  if (totalPaisa !== row.total_paisa || !Number.isSafeInteger(row.number) || row.number < 1 ||
+  const { details, lines } = readOrderSnapshot(row.details_json, row.lines_json, row.total_paisa);
+  const totalPaisa = row.total_paisa;
+  if (!Number.isSafeInteger(row.number) || row.number < 1 ||
       !Number.isSafeInteger(row.revision) || row.revision < 1 ||
       !Number.isFinite(Date.parse(row.created_at)) || !Number.isFinite(Date.parse(row.updated_at))) {
     throw new Error('The saved order could not be read. Its stored data has not been changed.');
@@ -34,13 +33,14 @@ export function createSavedOrderStore(database: Database) {
   async function get(id: string): Promise<SavedOrder> {
     const [row] = await database.query<OrderRow>('SELECT * FROM open_orders WHERE id = ?', [id]);
     if (!row) throw new OrderValidationError('This saved order could not be found. Your current draft is unchanged.');
+    if (row.status === 'paid') throw new OrderPaidError();
     return readOrder(row);
   }
 
   return {
     get,
     async list(): Promise<SavedOrder[]> {
-      const rows = await database.query<OrderRow>('SELECT * FROM open_orders ORDER BY updated_at DESC, number DESC');
+      const rows = await database.query<OrderRow>("SELECT * FROM open_orders WHERE status = 'open' ORDER BY updated_at DESC, number DESC");
       return rows.map(readOrder);
     },
 
@@ -63,11 +63,14 @@ export function createSavedOrderStore(database: Database) {
         } : {
           // A stale update fails the NOT NULL constraint and rolls back atomically.
           statement: `UPDATE open_orders SET details_json = ?, lines_json = ?, total_paisa = ?,
-            updated_at = ?, revision = CASE WHEN revision = ? THEN revision + 1 ELSE NULL END WHERE id = ?`,
+            updated_at = ?, revision = CASE WHEN revision = ? THEN revision + 1 ELSE NULL END WHERE id = ? AND status = 'open'`,
           values: [details, lines, total, now, snapshot.expectedRevision, snapshot.id],
         }]);
       } catch (failure) {
-        const existing = await get(snapshot.id).catch(() => null);
+        const existing = await get(snapshot.id).catch(error => {
+          if (error instanceof OrderPaidError) throw error;
+          return null;
+        });
         // Retrying an acknowledged-late write never creates a duplicate order.
         if (existing?.revision === snapshot.expectedRevision + 1 &&
             JSON.stringify(existing.details) === details && JSON.stringify(existing.lines) === lines) return existing;

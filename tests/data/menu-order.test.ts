@@ -45,6 +45,7 @@ it('upgrades version-two menus to persistent ordering without resetting owner ch
     await database.write([
       ...['categories', 'menu_items', 'menu_variants'].map(table => ({ statement: `ALTER TABLE ${table} DROP COLUMN sort_order`, values: [] })),
       { statement: 'ALTER TABLE menu_items DROP COLUMN order_options_json', values: [] },
+      { statement: 'DROP TABLE sales', values: [] },
       { statement: 'DROP TABLE open_orders', values: [] },
       { statement: 'DELETE FROM schema_migrations WHERE version >= 3', values: [] },
     ]);

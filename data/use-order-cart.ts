@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { getSavedOrderStore } from './client';
+import { getSavedOrderStore, getSalesStore } from './client';
+import type { PaymentInput } from './payment-types';
+import { OrderValidationError } from './order-error';
 import type { MenuItem } from './menu-types';
 import { addCartLine, cartTotal, changeCartQuantity, createCartLine } from './order-cart';
 import { emptyOrderDetails, type CartLine, type OrderDetails, type OrderSelections } from './order-types';
@@ -85,7 +87,20 @@ export function useOrderCart() {
     } finally { locked.current = false; setBusy(false); }
   }
 
-  return { ...state, setDetails, add, changeQuantity, remove, clear, save, open, busy, dirty,
+  async function recordPayment(input: PaymentInput) {
+    ensureIdle();
+    if (current.current.id === input.orderId && hasChanges(current.current)) {
+      throw new OrderValidationError('Save the current cart changes before recording payment.');
+    }
+    locked.current = true; setBusy(true);
+    try {
+      const sale = await (await getSalesStore()).pay(input);
+      if (current.current.id === sale.orderId) commit(emptyDraft());
+      return sale;
+    } finally { locked.current = false; setBusy(false); }
+  }
+
+  return { ...state, setDetails, add, changeQuantity, remove, clear, save, open, recordPayment, busy, dirty,
     totalPaisa: cartTotal(state.lines), quantity: state.lines.reduce((count, line) => count + line.quantity, 0) };
 }
 

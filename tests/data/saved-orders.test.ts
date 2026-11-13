@@ -150,8 +150,9 @@ it('reports inconsistent stored totals without resetting or rewriting the order'
 it('upgrades version-four storage without resetting the existing menu or choices', async () => {
   const before = await createMenuStore(database).listMenuItems();
   await database.write([
+    { statement: 'DROP TABLE sales', values: [] },
     { statement: 'DROP TABLE open_orders', values: [] },
-    { statement: 'DELETE FROM schema_migrations WHERE version = 5', values: [] },
+    { statement: 'DELETE FROM schema_migrations WHERE version >= 5', values: [] },
   ]);
   await initializeSchema(database);
   await initializeSchema(database);

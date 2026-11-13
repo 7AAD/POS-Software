@@ -33,3 +33,5 @@ export const emptyOrderDetails: OrderDetails = {
 };
 
 export type OrderSelections = Record<string, string>;
+
+export const orderTypeLabels = { 'dine-in': 'Dine-in', takeaway: 'Takeaway', delivery: 'Delivery' };

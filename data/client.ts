@@ -2,6 +2,7 @@ import { openDatabase } from './database';
 import { createMenuStore, type MenuStore } from './menu-store';
 import type { Database } from './database-types';
 import { createSavedOrderStore, type SavedOrderStore } from './saved-order-store';
+import { createSalesStore, type SalesStore } from './sales-store';
 import { initializeSchema } from './schema';
 import { importInitialMenu } from './import-initial-menu';
 import { importOrderOptions } from './import-order-options';
@@ -30,4 +31,8 @@ export async function getMenuStore(): Promise<MenuStore> {
 
 export async function getSavedOrderStore(): Promise<SavedOrderStore> {
   return createSavedOrderStore(await getDatabase());
+}
+
+export async function getSalesStore(): Promise<SalesStore> {
+  return createSalesStore(await getDatabase());
 }
