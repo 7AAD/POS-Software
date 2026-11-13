@@ -1,6 +1,6 @@
 import type { Database } from './database-types';
 
-export const schemaVersion = 1;
+export const schemaVersion = 2;
 
 const initialSchema = [
   `CREATE TABLE schema_migrations (
@@ -38,13 +38,23 @@ export async function initializeSchema(database: Database): Promise<void> {
   );
   if (tables.length === 0) {
     await database.write(initialSchema.map(statement => ({ statement, values: [] })));
-    return;
   }
 
   const [current] = await database.query<{ version: number | null }>(
     'SELECT MAX(version) AS version FROM schema_migrations',
   );
-  if (current?.version !== schemaVersion) {
+  if (current?.version === 1) {
+    await database.write([
+      { statement: "ALTER TABLE menu_items ADD COLUMN description TEXT NOT NULL DEFAULT ''", values: [] },
+      { statement: 'ALTER TABLE menu_items ADD COLUMN premium_extra_required INTEGER NOT NULL DEFAULT 0 CHECK(premium_extra_required IN (0, 1))', values: [] },
+      { statement: `ALTER TABLE menu_items ADD COLUMN premium_extra_paisa INTEGER CHECK(
+          premium_extra_paisa IS NULL OR (premium_extra_required = 1 AND
+          typeof(premium_extra_paisa) = 'integer' AND premium_extra_paisa BETWEEN 1 AND 9007199254740991)
+        )`, values: [] },
+      { statement: 'CREATE TABLE menu_imports (id TEXT PRIMARY KEY NOT NULL, imported_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)', values: [] },
+      { statement: 'INSERT INTO schema_migrations(version) VALUES (2)', values: [] },
+    ]);
+  } else if (current?.version !== schemaVersion) {
     throw new Error('This database version is not supported. Update the app before opening it.');
   }
 }

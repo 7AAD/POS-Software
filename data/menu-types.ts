@@ -14,6 +14,9 @@ export interface MenuItem {
   categoryId: string;
   name: string;
   active: boolean;
+  description: string;
+  premiumExtraRequired: boolean;
+  premiumExtraPaisa: number | null;
   variants: MenuVariant[];
 }
 
@@ -27,5 +30,8 @@ export interface MenuItemInput {
   categoryId: string;
   name: string;
   active?: boolean;
+  description?: string;
+  premiumExtraRequired?: boolean;
+  premiumExtraPaisa?: number | null;
   variants: { id?: string; name: string; pricePaisa: number }[];
 }

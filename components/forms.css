@@ -1,0 +1,69 @@
+label { display: grid; gap: 7px; color: var(--supporting); font-size: 14px; }
+.select-field { display: grid; gap: 7px; }
+input, select, textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid #526176;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--surface);
+  font: inherit;
+  font-size: 16px;
+}
+
+input::placeholder, textarea::placeholder { color: var(--muted); }
+textarea { resize: vertical; }
+dialog.modal {
+  width: min(560px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid #45536a;
+  border-radius: 20px;
+  background: var(--card);
+  color: #fff;
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop { background: rgb(3 7 18 / 80%); }
+body:has(dialog[open]) { overflow: hidden; }
+.modal-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.modal-heading h2 { margin: 0; font-size: 20px; }
+.modal-content { padding: 20px; }
+.editor-form { display: grid; gap: 18px; }
+.editor-form fieldset { display: grid; gap: 18px; padding: 0; border: 0; margin: 0; min-width: 0; }
+.editor-form .check-label { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.check-label input { width: 22px; height: 22px; min-height: 22px; flex-shrink: 0; accent-color: var(--orange); }
+.field-section { border-top: 1px solid var(--border); padding-top: 18px; }
+.field-section h3 { margin: 0; font-size: 16px; }
+.field-help { color: var(--muted); font-size: 12px; margin: 6px 0 16px; }
+.variant-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px; align-items: end; gap: 8px; margin-bottom: 16px; }
+.variant-row .icon-button { min-width: 44px; width: 44px; padding: 9px; }
+.variant-row label { font-size: 12px; }
+.variant-row input { padding-inline: 8px; }
+.form-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.form-actions button { min-width: 100px; padding-inline: 16px; }
+.form-error { border: 1px solid #9f4052; background: #4b2934; color: #fecdd3; border-radius: 10px; padding: 12px; margin: 0; font-size: 14px; }
+.category-list { list-style: none; padding: 0; margin: 0; }
+.category-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); padding-block: 12px; }
+.category-list span { min-width: 0; overflow-wrap: anywhere; }
+.category-list button { font-size: 13px; padding-inline: 12px; flex-shrink: 0; }
+
+@media (max-width: 359px) {
+  .variant-row { grid-template-columns: minmax(0, 1fr) 44px; }
+  .variant-row label:first-child { grid-column: 1 / -1; }
+  .modal-content, .modal-heading { padding-inline: 16px; }
+}

@@ -12,7 +12,7 @@ export function Home() {
       <main>
         <div className="page-heading">
           <p className="eyebrow">YOUR WORKSPACE</p>
-          <h1>A fresh start<br />for your menu<span className="accent">.</span></h1>
+          <h1>Your menu,<br />ready to grow<span className="accent">.</span></h1>
           <p className="page-description">Your shop’s menu, kept together in one place.</p>
         </div>
         <div aria-live="polite" aria-atomic="true">
@@ -42,11 +42,12 @@ export function Home() {
                   <dd>{summary.items}</dd>
                 </div>
               </dl>
+              <a className="button-link" href="#menu"><AppIcon name="edit" />Manage menu</a>
               {summary.items === 0 && (
                 <div className="empty-menu">
                   <span className="empty-icon"><AppIcon name="utensils" /></span>
                   <h3>No menu items yet.</h3>
-                  <p>Your items and prices will appear here once your menu is added.</p>
+                  <p>Use Manage menu to add your first item.</p>
                 </div>
               )}
               <p className="device-note">

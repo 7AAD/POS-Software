@@ -22,9 +22,13 @@
 - Support special instructions on orders.
 - Juices have Small and Large prices.
 - NR drinks refer to 250 ml or 350 ml, configurable per item or deal.
-- Menu photos were provided in the planning conversation. Their exact items,
-  prices, and deal contents still need transcription and confirmation before
-  import; do not invent or seed the shop's live menu.
+- The owner reviewed the photo transcription in `menu-review.md`. The initial
+  catalog contains 52 items, 90 price choices, and 10 categories.
+- Tikka and Fajita are separate flavours with identical listed prices.
+- Deals retain the words Fries and Zinger Shawarmas without invented sizes or
+  portion counts. Premium pizza costs extra; the actual amount is not yet given.
+- Existing imported items must remain editable. Initial imports must not replace
+  owner edits or matching existing owner entries.
 
 ## Orders and money
 
@@ -57,12 +61,15 @@
 - Cloud backup provider, schedule, and recovery process.
 - Confirmed tax rules, rounding, and any payment-method-dependent tax rates.
 
-## First implemented task
+## Implemented foundation and menu editor
 
-Only the runtime, empty versioned database, and menu storage API are implemented.
+The runtime, versioned database, menu storage API, and menu editor are implemented.
 Categories have names. Items belong to a category and have names, availability,
 and one or more named sizes with prices. Item edits and their sizes are atomic.
-The home screen shows storage status and counts, not a menu editor.
-Add-ons, deals, permissions, orders, discounts, tax, and backups will be designed
+The home screen shows storage status/counts and opens the menu editor. The editor
+supports names, categories, sizes/prices, availability, contents, and optional
+premium charges. Imports and upgrades preserve owner data. Premium charges are
+unset until supplied; no charge amount or pricing formula has been inferred.
+Add-ons, structured deals, permissions, orders, discounts, tax, and backups will be designed
 in their own tasks. Later order records must keep a snapshot of sale-time names
 and prices so menu edits cannot rewrite past sales.

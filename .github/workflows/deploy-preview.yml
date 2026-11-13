@@ -41,6 +41,9 @@ jobs:
       - name: Check the built site at its repository path
         run: npm run test:preview
 
+      - name: Check menu editing and offline persistence
+        run: npm run test:browser
+
       - name: Package the Pages site
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:

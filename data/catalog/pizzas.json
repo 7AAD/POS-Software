@@ -1,0 +1,62 @@
+[
+  {
+    "id": "menu-pizzas-tikka",
+    "category": "Pizzas",
+    "name": "Tikka",
+    "variants": [{"id": "menu-pizzas-tikka-small", "name": "Small", "pricePaisa": 40000}, {"id": "menu-pizzas-tikka-medium", "name": "Medium", "pricePaisa": 75000}, {"id": "menu-pizzas-tikka-large", "name": "Large", "pricePaisa": 100000}, {"id": "menu-pizzas-tikka-family", "name": "Family", "pricePaisa": 160000}]
+  },
+  {
+    "id": "menu-pizzas-fajita",
+    "category": "Pizzas",
+    "name": "Fajita",
+    "variants": [{"id": "menu-pizzas-fajita-small", "name": "Small", "pricePaisa": 40000}, {"id": "menu-pizzas-fajita-medium", "name": "Medium", "pricePaisa": 75000}, {"id": "menu-pizzas-fajita-large", "name": "Large", "pricePaisa": 100000}, {"id": "menu-pizzas-fajita-family", "name": "Family", "pricePaisa": 160000}]
+  },
+  {
+    "id": "menu-pizzas-vegetable",
+    "category": "Pizzas",
+    "name": "Vegetable",
+    "variants": [{"id": "menu-pizzas-vegetable-small", "name": "Small", "pricePaisa": 40000}, {"id": "menu-pizzas-vegetable-medium", "name": "Medium", "pricePaisa": 75000}, {"id": "menu-pizzas-vegetable-large", "name": "Large", "pricePaisa": 100000}, {"id": "menu-pizzas-vegetable-family", "name": "Family", "pricePaisa": 160000}]
+  },
+  {
+    "id": "menu-pizzas-supreme",
+    "category": "Pizzas",
+    "name": "Supreme",
+    "variants": [{"id": "menu-pizzas-supreme-small", "name": "Small", "pricePaisa": 50000}, {"id": "menu-pizzas-supreme-medium", "name": "Medium", "pricePaisa": 80000}, {"id": "menu-pizzas-supreme-large", "name": "Large", "pricePaisa": 120000}, {"id": "menu-pizzas-supreme-family", "name": "Family", "pricePaisa": 180000}]
+  },
+  {
+    "id": "menu-pizzas-malai-boti",
+    "category": "Pizzas",
+    "name": "Malai Boti",
+    "variants": [{"id": "menu-pizzas-malai-boti-small", "name": "Small", "pricePaisa": 50000}, {"id": "menu-pizzas-malai-boti-medium", "name": "Medium", "pricePaisa": 80000}, {"id": "menu-pizzas-malai-boti-large", "name": "Large", "pricePaisa": 120000}, {"id": "menu-pizzas-malai-boti-family", "name": "Family", "pricePaisa": 180000}]
+  },
+  {
+    "id": "menu-pizzas-kababish",
+    "category": "Pizzas",
+    "name": "Kababish",
+    "variants": [{"id": "menu-pizzas-kababish-small", "name": "Small", "pricePaisa": 60000}, {"id": "menu-pizzas-kababish-medium", "name": "Medium", "pricePaisa": 90000}, {"id": "menu-pizzas-kababish-large", "name": "Large", "pricePaisa": 140000}, {"id": "menu-pizzas-kababish-family", "name": "Family", "pricePaisa": 200000}]
+  },
+  {
+    "id": "menu-pizzas-kabab-crust",
+    "category": "Pizzas",
+    "name": "Kabab Crust",
+    "variants": [{"id": "menu-pizzas-kabab-crust-small", "name": "Small", "pricePaisa": 60000}, {"id": "menu-pizzas-kabab-crust-medium", "name": "Medium", "pricePaisa": 90000}, {"id": "menu-pizzas-kabab-crust-large", "name": "Large", "pricePaisa": 140000}, {"id": "menu-pizzas-kabab-crust-family", "name": "Family", "pricePaisa": 200000}]
+  },
+  {
+    "id": "menu-pizzas-crown-crust",
+    "category": "Pizzas",
+    "name": "Crown Crust",
+    "variants": [{"id": "menu-pizzas-crown-crust-medium", "name": "Medium", "pricePaisa": 90000}, {"id": "menu-pizzas-crown-crust-large", "name": "Large", "pricePaisa": 140000}, {"id": "menu-pizzas-crown-crust-family", "name": "Family", "pricePaisa": 200000}]
+  },
+  {
+    "id": "menu-pizzas-cheese-crust",
+    "category": "Pizzas",
+    "name": "Cheese Crust",
+    "variants": [{"id": "menu-pizzas-cheese-crust-medium", "name": "Medium", "pricePaisa": 90000}, {"id": "menu-pizzas-cheese-crust-large", "name": "Large", "pricePaisa": 140000}, {"id": "menu-pizzas-cheese-crust-family", "name": "Family", "pricePaisa": 200000}]
+  },
+  {
+    "id": "menu-pizzas-lazania",
+    "category": "Pizzas",
+    "name": "Lazania",
+    "variants": [{"id": "menu-pizzas-lazania-medium", "name": "Medium", "pricePaisa": 100000}, {"id": "menu-pizzas-lazania-large", "name": "Large", "pricePaisa": 180000}, {"id": "menu-pizzas-lazania-family", "name": "Family", "pricePaisa": 220000}]
+  }
+]

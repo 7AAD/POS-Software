@@ -1,0 +1,128 @@
+[
+  {
+    "id": "menu-juice-banana-shake",
+    "category": "Juice",
+    "name": "Banana Shake",
+    "variants": [{"id": "menu-juice-banana-shake-small", "name": "Small", "pricePaisa": 12000}, {"id": "menu-juice-banana-shake-large", "name": "Large", "pricePaisa": 15000}]
+  },
+  {
+    "id": "menu-juice-apple-shake",
+    "category": "Juice",
+    "name": "Apple Shake",
+    "variants": [{"id": "menu-juice-apple-shake-small", "name": "Small", "pricePaisa": 12000}, {"id": "menu-juice-apple-shake-large", "name": "Large", "pricePaisa": 15000}]
+  },
+  {
+    "id": "menu-juice-mango-shake",
+    "category": "Juice",
+    "name": "Mango Shake",
+    "variants": [{"id": "menu-juice-mango-shake-small", "name": "Small", "pricePaisa": 12000}, {"id": "menu-juice-mango-shake-large", "name": "Large", "pricePaisa": 15000}]
+  },
+  {
+    "id": "menu-juice-strawberry-shake",
+    "category": "Juice",
+    "name": "Strawberry Shake",
+    "variants": [{"id": "menu-juice-strawberry-shake-small", "name": "Small", "pricePaisa": 12000}, {"id": "menu-juice-strawberry-shake-large", "name": "Large", "pricePaisa": 15000}]
+  },
+  {
+    "id": "menu-juice-carrot-juice",
+    "category": "Juice",
+    "name": "Carrot Juice",
+    "variants": [{"id": "menu-juice-carrot-juice-small", "name": "Small", "pricePaisa": 10000}, {"id": "menu-juice-carrot-juice-large", "name": "Large", "pricePaisa": 12000}]
+  },
+  {
+    "id": "menu-juice-musammi-juice",
+    "category": "Juice",
+    "name": "Musammi Juice",
+    "variants": [{"id": "menu-juice-musammi-juice-small", "name": "Small", "pricePaisa": 12000}, {"id": "menu-juice-musammi-juice-large", "name": "Large", "pricePaisa": 15000}]
+  },
+  {
+    "id": "menu-deals-deal-1",
+    "category": "Deals",
+    "name": "Deal 1",
+    "variants": [{"id": "menu-deals-deal-1-bundle", "name": "Bundle", "pricePaisa": 40000}],
+    "description": "1 Zinger Burger + Fries + 1 NR"
+  },
+  {
+    "id": "menu-deals-deal-2",
+    "category": "Deals",
+    "name": "Deal 2",
+    "variants": [{"id": "menu-deals-deal-2-bundle", "name": "Bundle", "pricePaisa": 80000}],
+    "description": "2 Zinger Burgers + Fries + 2 NR"
+  },
+  {
+    "id": "menu-deals-deal-3",
+    "category": "Deals",
+    "name": "Deal 3",
+    "variants": [{"id": "menu-deals-deal-3-bundle", "name": "Bundle", "pricePaisa": 120000}],
+    "description": "3 Zinger Burgers + Fries + 1 L drink"
+  },
+  {
+    "id": "menu-deals-deal-4",
+    "category": "Deals",
+    "name": "Deal 4",
+    "variants": [{"id": "menu-deals-deal-4-bundle", "name": "Bundle", "pricePaisa": 45000}],
+    "description": "1 Club Sandwich + Fries + 1 NR"
+  },
+  {
+    "id": "menu-deals-deal-5",
+    "category": "Deals",
+    "name": "Deal 5",
+    "variants": [{"id": "menu-deals-deal-5-bundle", "name": "Bundle", "pricePaisa": 65000}],
+    "description": "1 Zinger Burger + 1 Zinger Shawarma + Fries + 0.5 L drink"
+  },
+  {
+    "id": "menu-deals-deal-6",
+    "category": "Deals",
+    "name": "Deal 6",
+    "variants": [{"id": "menu-deals-deal-6-bundle", "name": "Bundle", "pricePaisa": 140000}],
+    "description": "2 Zinger Burgers + 2 Zinger Shawarmas + Fries + 1 L drink"
+  },
+  {
+    "id": "menu-deals-deal-7",
+    "category": "Deals",
+    "name": "Deal 7",
+    "variants": [{"id": "menu-deals-deal-7-bundle", "name": "Bundle", "pricePaisa": 70000}],
+    "description": "1 Small Pizza + 1 Zinger Burger + 0.5 L drink",
+    "premiumExtraRequired": true
+  },
+  {
+    "id": "menu-deals-deal-8",
+    "category": "Deals",
+    "name": "Deal 8",
+    "variants": [{"id": "menu-deals-deal-8-bundle", "name": "Bundle", "pricePaisa": 120000}],
+    "description": "3 Small Pizzas + 1 L drink",
+    "premiumExtraRequired": true
+  },
+  {
+    "id": "menu-deals-deal-9",
+    "category": "Deals",
+    "name": "Deal 9",
+    "variants": [{"id": "menu-deals-deal-9-bundle", "name": "Bundle", "pricePaisa": 140000}],
+    "description": "1 Medium Pizza + 2 Zinger Burgers + 1 L drink",
+    "premiumExtraRequired": true
+  },
+  {
+    "id": "menu-deals-deal-10",
+    "category": "Deals",
+    "name": "Deal 10",
+    "variants": [{"id": "menu-deals-deal-10-bundle", "name": "Bundle", "pricePaisa": 170000}],
+    "description": "1 Medium Pizza + 3 Zinger Burgers + 1.5 L drink",
+    "premiumExtraRequired": true
+  },
+  {
+    "id": "menu-deals-deal-11",
+    "category": "Deals",
+    "name": "Deal 11",
+    "variants": [{"id": "menu-deals-deal-11-bundle", "name": "Bundle", "pricePaisa": 155000}],
+    "description": "2 Medium Pizzas + 1.5 L drink",
+    "premiumExtraRequired": true
+  },
+  {
+    "id": "menu-deals-deal-12",
+    "category": "Deals",
+    "name": "Deal 12",
+    "variants": [{"id": "menu-deals-deal-12-bundle", "name": "Bundle", "pricePaisa": 200000}],
+    "description": "2 Large Pizzas + 1.5 L drink",
+    "premiumExtraRequired": true
+  }
+]

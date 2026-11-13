@@ -1,0 +1,146 @@
+[
+  {
+    "id": "menu-burgers-shami-burger",
+    "category": "Burgers",
+    "name": "Shami Burger",
+    "variants": [{"id": "menu-burgers-shami-burger-regular", "name": "Regular", "pricePaisa": 14000}]
+  },
+  {
+    "id": "menu-burgers-double-anda-burger",
+    "category": "Burgers",
+    "name": "Double Anda Burger",
+    "variants": [{"id": "menu-burgers-double-anda-burger-regular", "name": "Regular", "pricePaisa": 18000}]
+  },
+  {
+    "id": "menu-burgers-chicken-shami-burger",
+    "category": "Burgers",
+    "name": "Chicken Shami Burger",
+    "variants": [{"id": "menu-burgers-chicken-shami-burger-regular", "name": "Regular", "pricePaisa": 18000}]
+  },
+  {
+    "id": "menu-burgers-chicken-burger",
+    "category": "Burgers",
+    "name": "Chicken Burger",
+    "variants": [{"id": "menu-burgers-chicken-burger-regular", "name": "Regular", "pricePaisa": 20000}]
+  },
+  {
+    "id": "menu-burgers-cheesy-chicken-burger",
+    "category": "Burgers",
+    "name": "Cheesy Chicken Burger",
+    "variants": [{"id": "menu-burgers-cheesy-chicken-burger-regular", "name": "Regular", "pricePaisa": 28000}]
+  },
+  {
+    "id": "menu-burgers-zinger-burger",
+    "category": "Burgers",
+    "name": "Zinger Burger",
+    "variants": [{"id": "menu-burgers-zinger-burger-regular", "name": "Regular", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-burgers-cheesy-zinger-burger",
+    "category": "Burgers",
+    "name": "Cheesy Zinger Burger",
+    "variants": [{"id": "menu-burgers-cheesy-zinger-burger-regular", "name": "Regular", "pricePaisa": 38000}]
+  },
+  {
+    "id": "menu-burgers-mighty-burger",
+    "category": "Burgers",
+    "name": "Mighty Burger",
+    "variants": [{"id": "menu-burgers-mighty-burger-regular", "name": "Regular", "pricePaisa": 50000}]
+  },
+  {
+    "id": "menu-burgers-cheesy-mighty-burger",
+    "category": "Burgers",
+    "name": "Cheesy Mighty Burger",
+    "variants": [{"id": "menu-burgers-cheesy-mighty-burger-regular", "name": "Regular", "pricePaisa": 60000}]
+  },
+  {
+    "id": "menu-burgers-patty-burger",
+    "category": "Burgers",
+    "name": "Patty Burger",
+    "variants": [{"id": "menu-burgers-patty-burger-regular", "name": "Regular", "pricePaisa": 25000}]
+  },
+  {
+    "id": "menu-burgers-cheesy-patty-burger",
+    "category": "Burgers",
+    "name": "Cheesy Patty Burger",
+    "variants": [{"id": "menu-burgers-cheesy-patty-burger-regular", "name": "Regular", "pricePaisa": 33000}]
+  },
+  {
+    "id": "menu-shawarmas-chicken-shawarma",
+    "category": "Shawarmas",
+    "name": "Chicken Shawarma",
+    "variants": [{"id": "menu-shawarmas-chicken-shawarma-small", "name": "Small", "pricePaisa": 16000}, {"id": "menu-shawarmas-chicken-shawarma-large", "name": "Large", "pricePaisa": 20000}]
+  },
+  {
+    "id": "menu-shawarmas-zinger-shawarma",
+    "category": "Shawarmas",
+    "name": "Zinger Shawarma",
+    "variants": [{"id": "menu-shawarmas-zinger-shawarma-small", "name": "Small", "pricePaisa": 25000}, {"id": "menu-shawarmas-zinger-shawarma-large", "name": "Large", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-shawarmas-platter",
+    "category": "Shawarmas",
+    "name": "Platter",
+    "variants": [{"id": "menu-shawarmas-platter-2-bread", "name": "2 Bread", "pricePaisa": 40000}]
+  },
+  {
+    "id": "menu-shawarmas-extra-bread",
+    "category": "Shawarmas",
+    "name": "Extra Bread",
+    "variants": [{"id": "menu-shawarmas-extra-bread-regular", "name": "Regular", "pricePaisa": 5000}]
+  },
+  {
+    "id": "menu-sandwiches-club-sandwich",
+    "category": "Sandwiches",
+    "name": "Club Sandwich",
+    "variants": [{"id": "menu-sandwiches-club-sandwich-regular", "name": "Regular", "pricePaisa": 35000}]
+  },
+  {
+    "id": "menu-sandwiches-chicken-sandwich",
+    "category": "Sandwiches",
+    "name": "Chicken Sandwich",
+    "variants": [{"id": "menu-sandwiches-chicken-sandwich-regular", "name": "Regular", "pricePaisa": 40000}]
+  },
+  {
+    "id": "menu-fries-fries",
+    "category": "Fries",
+    "name": "Fries",
+    "variants": [{"id": "menu-fries-fries-regular", "name": "Regular", "pricePaisa": 10000}, {"id": "menu-fries-fries-medium", "name": "Medium", "pricePaisa": 20000}, {"id": "menu-fries-fries-large", "name": "Large", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-loaded-fries-loaded-fries",
+    "category": "Loaded Fries",
+    "name": "Loaded Fries",
+    "variants": [{"id": "menu-loaded-fries-loaded-fries-regular", "name": "Regular", "pricePaisa": 30000}, {"id": "menu-loaded-fries-loaded-fries-large", "name": "Large", "pricePaisa": 50000}]
+  },
+  {
+    "id": "menu-snacks-twister",
+    "category": "Snacks",
+    "name": "Twister",
+    "variants": [{"id": "menu-snacks-twister-regular", "name": "Regular", "pricePaisa": 10000}]
+  },
+  {
+    "id": "menu-snacks-nuggets",
+    "category": "Snacks",
+    "name": "Nuggets",
+    "variants": [{"id": "menu-snacks-nuggets-6-pieces", "name": "6 Pieces", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-snacks-hot-wings",
+    "category": "Snacks",
+    "name": "Hot Wings",
+    "variants": [{"id": "menu-snacks-hot-wings-6-pieces", "name": "6 Pieces", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-snacks-hot-shots",
+    "category": "Snacks",
+    "name": "Hot Shots",
+    "variants": [{"id": "menu-snacks-hot-shots-10-pieces", "name": "10 Pieces", "pricePaisa": 30000}]
+  },
+  {
+    "id": "menu-dip-sauce-dip-sauce",
+    "category": "Dip Sauce",
+    "name": "Dip Sauce",
+    "variants": [{"id": "menu-dip-sauce-dip-sauce-regular", "name": "Regular", "pricePaisa": 5000}]
+  }
+]

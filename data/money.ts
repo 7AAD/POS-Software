@@ -15,5 +15,13 @@ export function formatPkr(paisa: number): string {
     throw new Error('Prices must be non-negative whole paisa amounts.');
   }
   const rupees = Math.floor(paisa / 100).toLocaleString('en-PK');
-  return `PKR ${rupees}.${String(paisa % 100).padStart(2, '0')}`;
+  const decimals = paisa % 100 === 0 ? '' : `.${String(paisa % 100).padStart(2, '0')}`;
+  return `Rs. ${rupees}${decimals}`;
+}
+
+export function priceForInput(paisa: number): string {
+  if (!Number.isSafeInteger(paisa) || paisa < 0) {
+    throw new Error('Prices must be non-negative whole paisa amounts.');
+  }
+  return `${Math.floor(paisa / 100)}.${String(paisa % 100).padStart(2, '0')}`;
 }

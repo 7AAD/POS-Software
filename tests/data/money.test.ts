@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPkr, parsePkr } from '../../data/money';
+import { formatPkr, parsePkr, priceForInput } from '../../data/money';
 
 describe('PKR money', () => {
   it.each([
@@ -14,10 +14,16 @@ describe('PKR money', () => {
     },
   );
 
-  it('formats paisa without dropping the currency or decimal places', () => {
-    expect(formatPkr(0)).toBe('PKR 0.00');
-    expect(formatPkr(25075)).toBe('PKR 250.75');
-    expect(formatPkr(125000)).toBe('PKR 1,250.00');
+  it('uses the reference currency display and preserves fractional paisa', () => {
+    expect(formatPkr(0)).toBe('Rs. 0');
+    expect(formatPkr(25075)).toBe('Rs. 250.75');
+    expect(formatPkr(125000)).toBe('Rs. 1,250');
+  });
+
+  it('round-trips prices through edit fields without precision loss', () => {
+    for (const price of [0, 29, 15550, Number.MAX_SAFE_INTEGER]) {
+      expect(parsePkr(priceForInput(price))).toBe(price);
+    }
   });
 
   it.each([-1, 0.5, NaN, Infinity])('rejects invalid stored amount %s', value => {

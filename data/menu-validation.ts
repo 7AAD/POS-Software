@@ -10,6 +10,18 @@ export function requiredText(value: string, label: string): string {
 export function validateMenuItem(input: MenuItemInput): void {
   requiredText(input.name, 'Item name');
   requiredText(input.categoryId, 'Category');
+  if (input.description !== undefined &&
+      (typeof input.description !== 'string' || input.description.length > 1000)) {
+    throw new Error('Details must contain at most 1,000 characters.');
+  }
+  if (input.premiumExtraRequired !== undefined && typeof input.premiumExtraRequired !== 'boolean') {
+    throw new Error('Premium extra must be enabled or disabled.');
+  }
+  if (input.premiumExtraPaisa !== undefined && input.premiumExtraPaisa !== null) {
+    if (!input.premiumExtraRequired || !Number.isSafeInteger(input.premiumExtraPaisa) || input.premiumExtraPaisa <= 0) {
+      throw new Error('Enable premium extra and enter a positive whole paisa amount.');
+    }
+  }
   if (input.active !== undefined && typeof input.active !== 'boolean') {
     throw new Error('Item availability must be true or false.');
   }

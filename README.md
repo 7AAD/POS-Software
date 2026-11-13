@@ -10,13 +10,20 @@ section at a time: discuss, agree, build, test, then improve.
   icons, rounded cards, and clear loading and error states.
 - An Android project using Capacitor and its native SQLite plugin.
 - A versioned database for categories, menu items, and size-based prices.
+- The reviewed Master Foods menu: 52 items, 90 price choices, and 10 categories.
+- A menu editor: search/filter, add items, edit existing names, sizes, prices,
+  availability, deal contents, and premium extras. Categories can be added/renamed.
 - Data functions to list, add, and edit categories and menu items. Each item has
   at least one size; use `Regular` when it has only one price.
 - Exact PKR amounts stored as integer paisa: PKR 150.50 is saved as `15050`.
 - Validation and transactions: an invalid edit leaves the previous menu intact.
 
-The menu starts empty. There is no menu editor, login, order taking, payment,
-printer integration, or backup feature yet. This is the first data foundation.
+The reviewed menu imports once per device. Existing owner entries win when
+names match, and later edits are never reset by reopening or updating the app.
+Premium pizza extras on Deals 7–12 are marked as required but have no invented
+amount: set the extra in the item editor when agreed. Deal prices are base prices;
+there is no checkout or automatic premium selection/calculation yet.
+Login, orders, payments, printer integration, and backups remain future tasks.
 See [the agreed requirements](docs/requirements.md) for the longer-term scope.
 
 ## Run the development version
@@ -117,13 +124,17 @@ data removes it. No cloud or file backups exist yet.
 
 - `AGENTS.md`: the exact project rules for future Codex tasks.
 - `index.html` and `main.tsx`: start React and open the home screen.
-- `pages/`: one file per screen. `Home.tsx` is the only screen so far.
+- `App.tsx`: selects the Home or Menu screen using hash navigation.
+- `pages/`: one file per screen: `Home.tsx` and the menu editor in `Menu.tsx`.
 - `components/`: shared UI and styling, including `StatusCard.tsx` and `styles.css`.
 - `data/`: all loading and saving logic. `schema.ts` defines the database;
   `menu-store.ts` provides menu operations; `money.ts` handles PKR conversion.
   `database.ts` selects the Android or browser storage adapter.
+- `data/catalog/`: the reviewed initial menu. `import-initial-menu.ts` saves it
+  atomically once per database; `menu-source.csv` records the photo transcription.
 - `tests/data/`: tests the actual schema, menu rules, persistence, and PKR amounts.
-- `tests/browser/`: mobile browser checks for startup, offline writes, and reloads.
+- `tests/browser/`: checks startup, importing, editing, category management,
+  offline writes, and persistence after reloads.
 - `android/`: Capacitor's native Android project. Generated web assets are ignored.
 - `.github/workflows/`: builds a downloadable test APK in GitHub Actions.
 - `docs/`: agreed requirements and decisions still to discuss.
@@ -157,8 +168,8 @@ paths that a development-server test would miss. It also needs Python 3.
 
 Discuss each feature before starting it. One numbered feature per Codex task:
 
-1. [ ] Menu editor: manage categories, items, sizes, prices, and availability.
-2. [ ] Menu customization: configure add-ons and editable meal deals.
+1. [x] Menu editor: manage categories, items, sizes, prices, and availability.
+2. [ ] Menu customization: configure add-ons and structured meal-deal choices.
 3. [ ] Staff access: owner and cashier roles with offline owner PIN approval.
 4. [ ] Order taking: dine-in, takeaway, and delivery carts with customer details.
 5. [ ] Open orders: save, reopen, and update unfinished orders.

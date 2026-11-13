@@ -7,6 +7,9 @@ interface ItemRow {
   categoryId: string;
   name: string;
   active: number;
+  description: string;
+  premiumExtraRequired: number;
+  premiumExtraPaisa: number | null;
   variantId: string;
   variantName: string;
   pricePaisa: number;
@@ -34,6 +37,8 @@ export function createMenuStore(database: Database) {
     async listMenuItems(): Promise<MenuItem[]> {
       const rows = await database.query<ItemRow>(`
         SELECT item.id, item.category_id AS categoryId, item.name, item.active,
+          item.description, item.premium_extra_required AS premiumExtraRequired,
+          item.premium_extra_paisa AS premiumExtraPaisa,
           variant.id AS variantId, variant.name AS variantName,
           variant.price_paisa AS pricePaisa
         FROM menu_items AS item
@@ -47,6 +52,8 @@ export function createMenuStore(database: Database) {
           item = {
             id: row.id, categoryId: row.categoryId, name: row.name,
             active: row.active === 1, variants: [],
+            description: row.description, premiumExtraRequired: row.premiumExtraRequired === 1,
+            premiumExtraPaisa: row.premiumExtraPaisa,
           };
           items.set(row.id, item);
         }
@@ -62,6 +69,9 @@ export function createMenuStore(database: Database) {
         categoryId: requiredText(input.categoryId, 'Category'),
         name: requiredText(input.name, 'Item name'),
         active: input.active ?? true,
+        description: input.description?.trim() ?? '',
+        premiumExtraRequired: input.premiumExtraRequired ?? false,
+        premiumExtraPaisa: input.premiumExtraPaisa ?? null,
         variants: input.variants.map(variant => ({
           id: variant.id === undefined ? crypto.randomUUID() : requiredText(variant.id, 'Size ID'),
           name: requiredText(variant.name, 'Size name'),
@@ -70,10 +80,14 @@ export function createMenuStore(database: Database) {
       };
       await database.write([
         {
-          statement: `INSERT INTO menu_items(id, category_id, name, active) VALUES (?, ?, ?, ?)
+          statement: `INSERT INTO menu_items(id, category_id, name, active, description,
+              premium_extra_required, premium_extra_paisa) VALUES (?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(id) DO UPDATE SET category_id = excluded.category_id,
-              name = excluded.name, active = excluded.active`,
-          values: [item.id, item.categoryId, item.name, Number(item.active)],
+              name = excluded.name, active = excluded.active, description = excluded.description,
+              premium_extra_required = excluded.premium_extra_required,
+              premium_extra_paisa = excluded.premium_extra_paisa`,
+          values: [item.id, item.categoryId, item.name, Number(item.active), item.description,
+            Number(item.premiumExtraRequired), item.premiumExtraPaisa],
         },
         { statement: 'DELETE FROM menu_variants WHERE item_id = ?', values: [item.id] },
         ...item.variants.map(variant => ({
