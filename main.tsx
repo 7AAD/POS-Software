@@ -5,6 +5,7 @@ import './components/styles.css';
 import './components/menu.css';
 import './components/forms.css';
 import './components/order.css';
+import './components/navigation.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

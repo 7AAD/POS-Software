@@ -5,6 +5,7 @@ test('takes orders offline, combines identical selections, and changes quantitie
   await page.getByRole('link', { name: 'Take an order', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Choose Shami Burger', exact: true })).toBeVisible();
   await context.setOffline(true);
+  await page.getByRole('button', { name: 'Search menu', exact: true }).click();
   await page.getByLabel('Search items', { exact: true }).fill('shami burger');
   await page.getByRole('button', { name: 'Choose Shami Burger', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Add Shami Burger', exact: true });
@@ -12,7 +13,7 @@ test('takes orders offline, combines identical selections, and changes quantitie
   await dialog.getByRole('button', { name: 'Increase Shami Burger quantity', exact: true }).click();
   await expect(dialog.locator('.selection-total-amount')).toContainText('Rs. 280');
   await dialog.getByRole('button', { name: 'Add to order', exact: true }).click();
-  const cart = page.getByRole('region', { name: 'Your cart', exact: true });
+  const cart = page.getByRole('region', { name: 'Current Order', exact: true });
   await expect(cart.getByRole('list', { name: 'Order items' }).locator(':scope > li')).toHaveCount(1);
   await expect(cart).toContainText('Note: No onions');
   await page.getByRole('button', { name: 'Choose Shami Burger', exact: true }).click();
@@ -36,10 +37,13 @@ test('preserves a draft and its prices through navigation and menu edits', async
   await page.goto('/#order');
   await page.getByRole('button', { name: 'Choose Shami Burger', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Add to order', exact: true }).click();
-  const cart = page.getByRole('region', { name: 'Your cart', exact: true });
-  await cart.getByLabel('Order type', { exact: true }).selectOption('takeaway');
-  await cart.getByLabel('Customer name (optional)', { exact: true }).fill('Ali');
-  await cart.getByLabel('Phone (optional)', { exact: true }).fill('03001234567');
+  const cart = page.getByRole('region', { name: 'Current Order', exact: true });
+  await page.getByRole('group', { name: 'Order type', exact: true }).getByRole('button', { name: 'Takeaway', exact: true }).click();
+  await page.getByRole('button', { name: 'Customer and table details', exact: true }).click();
+  const details = page.getByRole('dialog', { name: 'Customer and table details', exact: true });
+  await details.getByLabel('Customer name (optional)', { exact: true }).fill('Ali');
+  await details.getByLabel('Phone (optional)', { exact: true }).fill('03001234567');
+  await details.getByRole('button', { name: 'Done', exact: true }).click();
   await page.getByRole('link', { name: 'Home', exact: true }).click();
   await page.getByRole('link', { name: 'Manage menu', exact: true }).click();
   await page.getByRole('button', { name: 'Edit Shami Burger', exact: true }).click();
@@ -49,9 +53,11 @@ test('preserves a draft and its prices through navigation and menu edits', async
   await expect(editor).not.toBeVisible();
   await page.getByRole('link', { name: 'Take an order', exact: true }).click();
   await expect(cart.locator('.cart-total')).toContainText('Rs. 140');
-  await expect(cart.getByLabel('Order type', { exact: true })).toHaveValue('takeaway');
-  await expect(cart.getByLabel('Customer name (optional)', { exact: true })).toHaveValue('Ali');
-  await expect(cart.getByLabel('Phone (optional)', { exact: true })).toHaveValue('03001234567');
+  await expect(page.getByRole('button', { name: 'Takeaway', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Customer and table details', exact: true }).click();
+  await expect(details.getByLabel('Customer name (optional)', { exact: true })).toHaveValue('Ali');
+  await expect(details.getByLabel('Phone (optional)', { exact: true })).toHaveValue('03001234567');
+  await details.getByRole('button', { name: 'Done', exact: true }).click();
   await page.getByRole('button', { name: 'Choose Shami Burger', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Add to order', exact: true }).click();
   await expect(cart.locator('.cart-lines > li')).toHaveCount(2);
@@ -62,14 +68,16 @@ test('preserves a draft and its prices through navigation and menu edits', async
   await expect(cart.locator('.cart-lines > li')).toHaveCount(2);
   await cart.getByRole('button', { name: 'Clear order', exact: true }).click();
   await confirm.getByRole('button', { name: 'Clear order', exact: true }).click();
-  await expect(cart.getByRole('heading', { name: 'Start with something tasty.' })).toBeVisible();
-  await expect(cart.getByLabel('Customer name (optional)', { exact: true })).toHaveValue('');
-  await expect(cart.getByLabel('Order type', { exact: true })).toHaveValue('dine-in');
+  await expect(cart).toContainText('Tap an item to add it to the order.');
+  await page.getByRole('button', { name: 'Customer and table details', exact: true }).click();
+  await expect(details.getByLabel('Customer name (optional)', { exact: true })).toHaveValue('');
+  await details.getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Dine-in', exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('keeps premium flavours blocked until priced and charges each premium pizza in each bundle', async ({ page }) => {
   await page.goto('/#order');
-  await page.getByLabel('Category', { exact: true }).selectOption({ label: 'Deals' });
+  await page.getByRole('group', { name: 'Menu categories', exact: true }).getByRole('button', { name: 'Deals', exact: true }).click();
   await page.getByRole('button', { name: 'Choose Deal 8', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Add Deal 8', exact: true });
   await expect(dialog.getByLabel('Small pizza 1', { exact: true }).locator('option[value="menu-pizzas-supreme-small"]')).toBeDisabled();
@@ -78,13 +86,14 @@ test('keeps premium flavours blocked until priced and charges each premium pizza
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText('Choose your size and options');
   await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
-  await page.getByRole('link', { name: 'Manage menu', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Menu', exact: true }).click();
   await page.getByRole('button', { name: 'Edit Deal 8', exact: true }).click();
   const editor = page.getByRole('dialog', { name: 'Edit menu item', exact: true });
   await editor.getByLabel('Premium extra (Rs.)', { exact: true }).fill('75');
   await editor.getByRole('button', { name: 'Save item', exact: true }).click();
   await expect(editor).not.toBeVisible();
   await page.getByRole('link', { name: 'Take an order', exact: true }).click();
+  await page.getByRole('group', { name: 'Menu categories', exact: true }).getByRole('button', { name: 'Deals', exact: true }).click();
   await page.getByRole('button', { name: 'Choose Deal 8', exact: true }).click();
   await dialog.getByLabel('Small pizza 1', { exact: true }).selectOption('menu-pizzas-tikka-small');
   await dialog.getByLabel('Small pizza 2', { exact: true }).selectOption('menu-pizzas-supreme-small');
@@ -92,7 +101,7 @@ test('keeps premium flavours blocked until priced and charges each premium pizza
   await dialog.getByRole('button', { name: 'Increase Deal 8 quantity', exact: true }).click();
   await expect(dialog.locator('.selection-total-amount')).toContainText('Rs. 2,700');
   await dialog.getByRole('button', { name: 'Add to order', exact: true }).click();
-  const cart = page.getByRole('region', { name: 'Your cart', exact: true });
+  const cart = page.getByRole('region', { name: 'Current Order', exact: true });
   await expect(cart.locator('.cart-total')).toContainText('Rs. 2,700');
   await expect(cart).toContainText('Small pizza 2: Supreme (premium)');
   await expect(cart).toContainText('Small pizza 3: Malai Boti (premium)');
@@ -108,7 +117,9 @@ test('menu availability also controls linked pizza choices', async ({ page }) =>
   await editor.getByRole('button', { name: 'Save item', exact: true }).click();
   await expect(editor).not.toBeVisible();
   await page.getByRole('link', { name: 'Take an order', exact: true }).click();
+  await page.getByRole('button', { name: 'Pizzas', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Choose Tikka', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Deals', exact: true }).click();
   await page.getByRole('button', { name: 'Choose Deal 7', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Add Deal 7', exact: true });
   await expect(dialog.getByLabel('Small pizza', { exact: true }).locator('option[value="menu-pizzas-tikka-small"]')).toBeDisabled();
@@ -136,18 +147,19 @@ test('owner-defined choices are editable and persist before being used in an ord
   const dialog = page.getByRole('dialog', { name: 'Add Shami Burger', exact: true });
   await dialog.getByLabel('Sauce', { exact: true }).selectOption({ label: 'Spicy · included' });
   await dialog.getByRole('button', { name: 'Add to order', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Your cart', exact: true })).toContainText('Sauce: Spicy');
+  await expect(page.getByRole('region', { name: 'Current Order', exact: true })).toContainText('Sauce: Spicy');
   await expect(page.locator('.cart-total')).toContainText('Rs. 140');
 });
 
 test('records NR choices without adding invented shawarma or fries sizes', async ({ page }) => {
   await page.goto('/#order');
+  await page.getByRole('button', { name: 'Deals', exact: true }).click();
   await page.getByRole('button', { name: 'Choose Deal 2', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Add Deal 2', exact: true });
   await dialog.getByLabel('NR drink 1', { exact: true }).selectOption('250 ml');
   await dialog.getByLabel('NR drink 2', { exact: true }).selectOption('350 ml');
   await dialog.getByRole('button', { name: 'Add to order', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Your cart', exact: true })).toContainText('NR drink 2: 350 ml');
+  await expect(page.getByRole('region', { name: 'Current Order', exact: true })).toContainText('NR drink 2: 350 ml');
   await page.getByRole('button', { name: 'Choose Deal 5', exact: true }).click();
   const deal5 = page.getByRole('dialog', { name: 'Add Deal 5', exact: true });
   await expect(deal5.locator('select')).toHaveCount(1);

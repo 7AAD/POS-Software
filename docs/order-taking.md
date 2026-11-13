@@ -11,18 +11,25 @@ Run `npm ci` and `npm run dev`, then open the address Vite reports and choose
 the same button. In GitHub, run **Actions → Build Android APK → Run workflow**
 with branch **feature/order-taking** to create that APK.
 
+The POS screen follows the compact reference: Dine-in/Takeaway/Delivery tabs,
+category chips, two-column food cards, and Current Order below the menu on phones.
+Scroll the cards to find more items. The header's search button searches the whole
+menu; its person button opens customer and table details. Bottom navigation opens
+Home, POS, and Menu. Review order focuses the cart and shows its total; payment
+comes in the checkout segment.
+
 1. Choose Shami Burger, add an instruction, and increase quantity to two.
    The total should be Rs. 280. Add the same selection/instruction again:
    it combines into quantity three, totalling Rs. 420.
-2. Add Chicken Shawarma, choose Large, and check the Rs. 200 price. Change a
+2. Choose the Shawarmas category, add Chicken Shawarma, choose Large, and check the Rs. 200 price. Change a
    quantity, then remove a line. Totals should update immediately.
-3. Visit Manage menu and change Shami Burger's price. Return to Take an order.
+3. Choose Menu in the bottom bar and change Shami Burger's price. Return to POS.
    The already-added line keeps its old price; adding it again uses the new price
    and creates a separate line. Customer details also stay through navigation.
-4. Open Deal 8. It requires three Small pizza choices. Base flavours work at the
+4. Choose the Deals category and open Deal 8. It requires three Small pizza choices. Base flavours work at the
    listed deal price. Premium choices stay disabled until an extra is set.
-5. In Manage menu, edit Deal 8 and set a test premium extra, for example Rs. 75.
-   Return to Order and choose Tikka, Supreme, and Malai Boti, quantity two.
+5. In Menu, edit Deal 8 and set a test premium extra, for example Rs. 75.
+   Return to POS → Deals → Deal 8 and choose Tikka, Supreme, and Malai Boti, quantity two.
    Expected: (Rs. 1,200 + Rs. 75 + Rs. 75) × 2 = **Rs. 2,700**.
    This example is a test amount, not a default or agreed selling fee.
 6. Mark Tikka unavailable in Manage menu. Both its standalone Add button and

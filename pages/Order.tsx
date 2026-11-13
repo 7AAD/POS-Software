@@ -1,69 +1,90 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AppHeader } from '../components/AppHeader';
 import { AppIcon } from '../components/AppIcon';
-import { MenuFilters } from '../components/MenuFilters';
 import { MenuItemCard } from '../components/MenuItemCard';
+import { Modal } from '../components/Modal';
 import { OrderCart } from '../components/OrderCart';
+import { OrderDetailsFields } from '../components/OrderDetailsFields';
 import { OrderItemDialog } from '../components/OrderItemDialog';
+import { SelectionTabs } from '../components/SelectionTabs';
 import { StatusCard } from '../components/StatusCard';
 import { filterMenu } from '../data/filter-menu';
 import type { MenuItem } from '../data/menu-types';
 import { formatPkr } from '../data/money';
+import type { OrderDetails } from '../data/order-types';
 import { useMenuEditor } from '../data/use-menu-editor';
 import type { OrderCartState } from '../data/use-order-cart';
 
 export function Order({ cart }: { cart: OrderCartState }) {
   const menu = useMenuEditor();
+  const viewport = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [categoryId, setCategoryId] = useState<string | null>(null);
   const [selected, setSelected] = useState<MenuItem | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [notice, setNotice] = useState('');
-  const { visible, groups } = filterMenu(menu.items, menu.categories, query, categoryId);
+  const activeCategory = query.trim() ? 'all' : categoryId ?? menu.categories[0]?.id ?? 'all';
+  const { visible, groups } = filterMenu(menu.items, menu.categories, query, activeCategory === 'all' ? '' : activeCategory);
+
   return (
     <div className="app-shell order-shell">
-      <AppHeader />
+      <AppHeader compact action={<button type="button" className="icon-button secondary customer-button"
+        aria-label="Customer and table details" onClick={() => setDetailsOpen(true)}><AppIcon name="customer" /></button>} />
       <main>
-        <nav className="order-nav" aria-label="Workspace">
-          <a className="back-link" href="#home"><AppIcon name="back" />Home</a>
-          <a className="back-link" href="#menu"><AppIcon name="edit" />Manage menu</a>
-        </nav>
-        <div className="page-heading menu-heading">
-          <p className="eyebrow">TAKE AN ORDER</p>
-          <h1>What’s cooking<span className="accent">?</span></h1>
-          <p className="page-description">Pick the food, make it their own, and keep the total in view.</p>
+        <div className="order-title-row">
+          <h1>New Order</h1><span className="draft-badge">Draft</span>
+          <button type="button" className="icon-button search-toggle secondary" aria-label="Search menu"
+            aria-expanded={searchOpen} aria-controls="order-search" onClick={() => {
+              setSearchOpen(previous => !previous); setQuery('');
+            }}><AppIcon name={searchOpen ? 'close' : 'search'} /></button>
         </div>
+        <SelectionTabs label="Order type" className="order-type-tabs" value={cart.details.type}
+          options={[{ value: 'dine-in', label: 'Dine-in' }, { value: 'takeaway', label: 'Takeaway' }, { value: 'delivery', label: 'Delivery' }]}
+          onChange={type => cart.setDetails({ ...cart.details, type: type as OrderDetails['type'] })} />
+        {searchOpen && <label id="order-search" className="order-search">Search items
+          <input type="search" autoFocus placeholder="Search the whole menu" value={query}
+            onChange={event => { setQuery(event.target.value); viewport.current?.scrollTo(0, 0); }} />
+        </label>}
         <div className="order-layout">
           <div className="order-menu">
             {menu.loading && <StatusCard title="Opening your menu" tone="loading"><p role="status">Please wait…</p></StatusCard>}
             {menu.error && <StatusCard title="Your menu could not be opened" tone="error">
               <p role="alert">Please try again. Your menu has not been reset.</p>
-              <button type="button" onClick={() => { window.location.hash = '#home'; }}>Go home</button>
+              <a className="button-link" href="#home">Go home</a>
             </StatusCard>}
             {!menu.loading && !menu.error && <>
-              <MenuFilters categories={menu.categories} query={query} categoryId={categoryId}
-                onQueryChange={setQuery} onCategoryChange={setCategoryId} />
-              <p className="menu-result-count">{visible.length} menu items · Choose an item to select its options</p>
-              <p role="status" className={notice ? 'save-notice' : 'sr-only'} aria-live="polite">{notice}</p>
-              {visible.length === 0 && <div className="empty-menu"><h2>No matching items</h2><p>Try another name or category.</p></div>}
-              <div className="menu-groups">
-                {groups.map(group => <section key={group.category.id} className="menu-group"
-                  aria-labelledby={`order-group-${group.category.id}`}>
-                  <div className="menu-group-heading"><h2 id={`order-group-${group.category.id}`}>{group.category.name}</h2>
-                    <span>{group.items.length} {group.items.length === 1 ? 'item' : 'items'}</span></div>
-                  <div className="menu-items">{group.items.map(item => <MenuItemCard item={item} key={item.id}
-                    categoryName={group.category.name} onSelect={() => { setSelected(item); setNotice(''); }} />)}</div>
-                </section>)}
+              <SelectionTabs label="Menu categories" className="category-tabs" value={activeCategory}
+                options={[...menu.categories.map(category => ({ value: category.id, label: category.name })), { value: 'all', label: 'All' }]}
+                onChange={value => { setCategoryId(value); setQuery(''); viewport.current?.scrollTo(0, 0); }} />
+              <p role="status" className="sr-only">{notice || `${visible.length} menu items`}</p>
+              <div ref={viewport} className="order-menu-viewport" role="region" aria-label="Menu items" tabIndex={0}>
+                {visible.length === 0 && <div className="empty-menu"><h2>No matching items</h2><p>Try another name or category.</p></div>}
+                <div className="order-menu-groups">
+                  {groups.map(group => <section key={group.category.id} aria-labelledby={`order-group-${group.category.id}`}>
+                    <h2 id={`order-group-${group.category.id}`} className={activeCategory === 'all' ? 'order-category-heading' : 'sr-only'}>{group.category.name}</h2>
+                    <div className="order-products">{group.items.map(item => <MenuItemCard item={item} key={item.id}
+                      categoryName={group.category.name} onSelect={() => { setSelected(item); setNotice(''); }} />)}</div>
+                  </section>)}
+                </div>
               </div>
             </>}
           </div>
-          <OrderCart cart={cart} />
+          <div className="order-summary">
+            <OrderCart cart={cart} />
+            <button type="button" className="order-review" disabled={cart.lines.length === 0} onClick={() => {
+              const target = document.getElementById('current-order');
+              target?.focus({ preventScroll: true });
+              target?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'nearest' });
+            }}>Review order · {formatPkr(cart.totalPaisa)}</button>
+            <p className="order-draft-note">Draft only · closing or reloading clears this order.</p>
+          </div>
         </div>
-        <a className="mobile-cart-link" href="#current-order" onClick={event => {
-          event.preventDefault();
-          document.getElementById('current-order')?.focus({ preventScroll: true });
-          document.getElementById('current-order')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }}><span><AppIcon name="cart" />View order · {cart.quantity}</span><strong>{formatPkr(cart.totalPaisa)}</strong></a>
       </main>
+      {detailsOpen && <Modal title="Customer and table details" onClose={() => setDetailsOpen(false)}>
+        <OrderDetailsFields value={cart.details} onChange={cart.setDetails} />
+        <div className="form-actions details-actions"><button type="button" onClick={() => setDetailsOpen(false)}>Done</button></div>
+      </Modal>}
       {selected && <OrderItemDialog item={selected} menu={menu.items} onClose={() => setSelected(null)}
         onAdd={(variantId, quantity, choices, notes) => {
           cart.add(selected, menu.items, variantId, quantity, choices, notes);

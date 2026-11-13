@@ -4,18 +4,16 @@ import { formatPkr } from '../data/money';
 import { AppIcon } from './AppIcon';
 import { Modal } from './Modal';
 import { QuantityControl } from './QuantityControl';
-import { OrderDetailsFields } from './OrderDetailsFields';
 
 export function OrderCart({ cart }: { cart: OrderCartState }) {
   const [error, setError] = useState('');
   const [clearing, setClearing] = useState(false);
   return (
     <section id="current-order" className="order-cart" aria-labelledby="cart-title" tabIndex={-1}>
-      <div className="cart-heading"><div><p className="eyebrow">CURRENT ORDER</p><h2 id="cart-title">Your cart</h2></div>
-        <span className="draft-badge">Draft · not saved</span></div>
-      <OrderDetailsFields value={cart.details} onChange={cart.setDetails} />
+      <div className="cart-heading"><h2 id="cart-title">Current Order</h2>
+        <span className="cart-item-count" aria-live="polite">{cart.quantity} {cart.quantity === 1 ? 'item' : 'items'}</span></div>
       {cart.lines.length === 0 ? <div className="empty-cart">
-        <AppIcon name="cart" /><h3>Start with something tasty.</h3><p>Choose an item from the menu to build this order.</p>
+        <p>Tap an item to add it to the order.</p>
       </div> : <>
         <ul className="cart-lines" aria-label="Order items">
           {cart.lines.map(line => <li className="cart-line" key={line.id}>
@@ -46,8 +44,6 @@ export function OrderCart({ cart }: { cart: OrderCartState }) {
         </div>
         <button type="button" className="secondary clear-cart" onClick={() => setClearing(true)}><AppIcon name="remove" />Clear order</button>
       </>}
-      <p className="cart-save-note">This draft stays while the app is open. Closing or reloading clears it.
-        Saving orders and checkout come next.</p>
       {clearing && <Modal title="Clear this order?" onClose={() => setClearing(false)}>
         <p>Remove every item and the customer details from this draft?</p>
         <div className="form-actions">

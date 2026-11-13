@@ -1,0 +1,30 @@
+.app-shell { padding-bottom: max(104px, calc(env(safe-area-inset-bottom) + 88px)); }
+.bottom-navigation {
+  position: fixed;
+  z-index: 3;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  width: min(100%, 640px);
+  padding: 6px 12px max(6px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  border-radius: 18px 18px 0 0;
+  background: #101722;
+}
+.bottom-navigation a {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 56px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  text-decoration: none;
+}
+.bottom-navigation svg { width: 21px; height: 21px; }
+.bottom-navigation a[aria-current="page"] { color: var(--orange); }
+.bottom-navigation a:hover { background: var(--card); color: var(--soft-orange); }

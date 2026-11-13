@@ -21,6 +21,10 @@ section at a time: discuss, agree, build, test, then improve.
 - Validation and transactions: an invalid edit leaves the previous menu intact.
 - An order-taking screen: search the grouped menu, select sizes and deal choices,
   add instructions, change quantities, and see exact PKR totals.
+- A compact POS layout based on the latest reference: order-type tabs, scrolling
+  category chips, two-column food cards, a current-order panel, and bottom navigation.
+  The header opens customer details and search; the menu scrolls in its own area.
+  [See the current mobile layout](docs/screenshots/order-taking-mobile.png).
 - Dine-in, takeaway, and delivery drafts with optional customer/phone/table details.
 - Editable deal choice groups, linked menu availability, and a premium charge for
   each premium pizza. Existing cart lines keep their added names and prices.

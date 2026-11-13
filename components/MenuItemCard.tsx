@@ -10,6 +10,20 @@ interface MenuItemCardProps {
 }
 
 export function MenuItemCard({ item, categoryName, onEdit, onSelect }: MenuItemCardProps) {
+  if (onSelect) {
+    const price = Math.min(...item.variants.map(variant => variant.pricePaisa));
+    return <article className="order-product" aria-label={item.name}>
+      <button type="button" className="product-choice" disabled={!item.active}
+        aria-label={`Choose ${item.name}`} onClick={onSelect}>
+        <span className="product-image"><AppIcon name="utensils" /></span>
+        <h3>{item.name}</h3>
+        <span className="product-price">
+          <span>{item.active ? <>{item.variants.length > 1 ? 'From ' : ''}{formatPkr(price)}</> : 'Unavailable'}</span>
+          <AppIcon name="plusCircle" />
+        </span>
+      </button>
+    </article>;
+  }
   return (
     <article className="menu-item" aria-label={item.name}>
       <div className="menu-item-heading">
@@ -30,10 +44,6 @@ export function MenuItemCard({ item, categoryName, onEdit, onSelect }: MenuItemC
       {item.premiumExtraRequired && <p className="premium-note">
         Premium extra per pizza: {item.premiumExtraPaisa == null ? 'amount not set' : formatPkr(item.premiumExtraPaisa)}
       </p>}
-      {onSelect && <button type="button" className="choose-item" disabled={!item.active}
-        aria-label={`Choose ${item.name}`} onClick={onSelect}><AppIcon name="plus" />
-        {item.active ? 'Add to order' : 'Unavailable'}
-      </button>}
     </article>
   );
 }

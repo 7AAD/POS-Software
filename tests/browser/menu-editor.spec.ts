@@ -49,7 +49,7 @@ test('existing imported items can be edited offline and edits survive reload', a
   await page.reload();
   await expect(edited).toContainText('Rs. 155.50');
   await expect(page.getByRole('article', { name: 'Shami Burger', exact: true })).toHaveCount(0);
-  await page.getByRole('link', { name: 'Home', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Home', exact: true }).click();
   await expect(page.locator('dd')).toHaveText(['10', '52']);
 });
 

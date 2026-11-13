@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { Menu } from './pages/Menu';
 import { Order } from './pages/Order';
 import { useOrderCart } from './data/use-order-cart';
+import { BottomNavigation } from './components/BottomNavigation';
 
 export function App() {
   const cart = useOrderCart();
@@ -12,7 +13,9 @@ export function App() {
     window.addEventListener('hashchange', navigate);
     return () => window.removeEventListener('hashchange', navigate);
   }, []);
-  if (hash === '#menu') return <Menu />;
-  if (hash === '#order') return <Order cart={cart} />;
-  return <Home />;
+  const active = hash === '#menu' ? 'menu' : hash === '#order' ? 'order' : 'home';
+  return <>
+    {active === 'menu' ? <Menu /> : active === 'order' ? <Order cart={cart} /> : <Home />}
+    <BottomNavigation active={active} />
+  </>;
 }
