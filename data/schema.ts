@@ -1,6 +1,6 @@
 import type { Database } from './database-types';
 
-export const schemaVersion = 2;
+export const schemaVersion = 3;
 
 const initialSchema = [
   `CREATE TABLE schema_migrations (
@@ -43,7 +43,10 @@ export async function initializeSchema(database: Database): Promise<void> {
   const [current] = await database.query<{ version: number | null }>(
     'SELECT MAX(version) AS version FROM schema_migrations',
   );
-  if (current?.version === 1) {
+  if (current?.version == null || current.version < 1 || current.version > schemaVersion) {
+    throw new Error('This database version is not supported. Update the app before opening it.');
+  }
+  if (current.version === 1) {
     await database.write([
       { statement: "ALTER TABLE menu_items ADD COLUMN description TEXT NOT NULL DEFAULT ''", values: [] },
       { statement: 'ALTER TABLE menu_items ADD COLUMN premium_extra_required INTEGER NOT NULL DEFAULT 0 CHECK(premium_extra_required IN (0, 1))', values: [] },
@@ -54,7 +57,17 @@ export async function initializeSchema(database: Database): Promise<void> {
       { statement: 'CREATE TABLE menu_imports (id TEXT PRIMARY KEY NOT NULL, imported_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)', values: [] },
       { statement: 'INSERT INTO schema_migrations(version) VALUES (2)', values: [] },
     ]);
-  } else if (current?.version !== schemaVersion) {
-    throw new Error('This database version is not supported. Update the app before opening it.');
+  }
+  if (current.version <= 2) {
+    await database.write([
+      { statement: 'ALTER TABLE categories ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0', values: [] },
+      { statement: 'ALTER TABLE menu_items ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0', values: [] },
+      { statement: 'ALTER TABLE menu_variants ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0', values: [] },
+      // Existing insertion order is the reviewed photo order, even after edits.
+      { statement: 'UPDATE categories SET sort_order = rowid', values: [] },
+      { statement: 'UPDATE menu_items SET sort_order = rowid', values: [] },
+      { statement: 'UPDATE menu_variants SET sort_order = rowid', values: [] },
+      { statement: 'INSERT INTO schema_migrations(version) VALUES (3)', values: [] },
+    ]);
   }
 }

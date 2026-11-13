@@ -12,7 +12,7 @@ export function MenuItemCard({ item, categoryName, onEdit }: MenuItemCardProps) 
   return (
     <article className="menu-item" aria-label={item.name}>
       <div className="menu-item-heading">
-        <div><p className="item-category">{categoryName}</p><h2>{item.name}</h2></div>
+        <div><p className="item-category">{categoryName}</p><h3>{item.name}</h3></div>
         <button type="button" className="icon-button secondary" aria-label={`Edit ${item.name}`} onClick={onEdit}>
           <AppIcon name="edit" />
         </button>

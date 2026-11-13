@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getMenuStore } from './client';
 import type { Category, CategoryInput, MenuItem, MenuItemInput } from './menu-types';
+import { updateMenuEntry } from './update-menu-entry';
 
 interface EditorState {
   loading: boolean;
@@ -30,16 +31,14 @@ export function useMenuEditor() {
   async function saveItem(input: MenuItemInput) {
     const saved = await (await getMenuStore()).saveMenuItem(input);
     setState(previous => ({ ...previous,
-      items: [...previous.items.filter(item => item.id !== saved.id), saved]
-        .sort((a, b) => a.name.localeCompare(b.name)),
+      items: updateMenuEntry(previous.items, saved),
     }));
   }
 
   async function saveCategory(input: CategoryInput) {
     const saved = await (await getMenuStore()).saveCategory(input);
     setState(previous => ({ ...previous,
-      categories: [...previous.categories.filter(category => category.id !== saved.id), saved]
-        .sort((a, b) => a.name.localeCompare(b.name)),
+      categories: updateMenuEntry(previous.categories, saved),
     }));
   }
 

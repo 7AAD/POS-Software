@@ -17,6 +17,9 @@ export function Menu() {
   const [notice, setNotice] = useState('');
   const visible = menu.items.filter(item => (!category || item.categoryId === category) &&
     item.name.toLowerCase().includes(query.trim().toLowerCase()));
+  const groups = menu.categories.map(entry => ({
+    category: entry, items: visible.filter(item => item.categoryId === entry.id),
+  })).filter(group => group.items.length > 0);
 
   async function saveItem(input: MenuItemInput) {
     await menu.saveItem(input);
@@ -60,10 +63,19 @@ export function Menu() {
             <h2>{menu.items.length ? 'No matching items' : 'No menu items yet'}</h2>
             <p>{menu.items.length ? 'Try another name or category.' : 'Add a category, then add your first item.'}</p>
           </div>}
-          <div className="menu-items">
-            {visible.map(item => <MenuItemCard key={item.id} item={item}
-              categoryName={menu.categories.find(entry => entry.id === item.categoryId)?.name ?? ''}
-              onEdit={() => { setEditor({ item }); setNotice(''); }} />)}
+          <div className="menu-groups">
+            {groups.map(group => <section key={group.category.id} className="menu-group"
+              aria-labelledby={`group-${group.category.id}`}>
+              <div className="menu-group-heading">
+                <h2 id={`group-${group.category.id}`}>{group.category.name}</h2>
+                <span>{group.items.length} {group.items.length === 1 ? 'item' : 'items'}</span>
+              </div>
+              <div className="menu-items">
+                {group.items.map(item => <MenuItemCard key={item.id} item={item}
+                  categoryName={group.category.name}
+                  onEdit={() => { setEditor({ item }); setNotice(''); }} />)}
+              </div>
+            </section>)}
           </div>
           <p className="menu-footnote">Deal prices are the listed base prices. Premium extras can be set in the item editor.</p>
         </>}

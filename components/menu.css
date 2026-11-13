@@ -41,10 +41,14 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .menu-result-count { margin-block: 20px; }
 .menu-footnote { padding: 12px 0; }
 .menu-items { display: grid; gap: 14px; }
+.menu-groups { display: grid; gap: 30px; }
+.menu-group-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.menu-group-heading h2 { margin: 0; font-size: 21px; overflow-wrap: anywhere; }
+.menu-group-heading span { color: var(--muted); font-size: 13px; flex-shrink: 0; }
 .menu-item { padding: 20px; border-radius: 18px; border: 1px solid var(--border); background: var(--card); }
 .menu-item-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
 .menu-item-heading > div { min-width: 0; }
-.menu-item h2 { font-size: 18px; margin: 2px 0 0; overflow-wrap: anywhere; }
+.menu-item h3 { font-size: 18px; margin: 2px 0 0; overflow-wrap: anywhere; }
 .item-category { color: var(--soft-orange); font-size: 12px; margin: 0 0 4px; }
 .item-description { color: var(--supporting); font-size: 14px; overflow-wrap: anywhere; white-space: pre-wrap; }
 .item-prices { list-style: none; margin: 18px 0; padding: 0; }

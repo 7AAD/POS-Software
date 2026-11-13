@@ -1,5 +1,34 @@
 import { expect, test } from '@playwright/test';
 
+test('the menu is grouped in printed order and edits keep their place', async ({ page }) => {
+  await page.goto('/#menu');
+  const headings = page.getByRole('heading', { level: 2 });
+  await expect(headings).toHaveText([
+    'Burgers', 'Shawarmas', 'Sandwiches', 'Fries', 'Loaded Fries',
+    'Snacks', 'Dip Sauce', 'Pizzas', 'Juice', 'Deals',
+  ]);
+  const burgers = page.getByRole('region', { name: 'Burgers', exact: true });
+  await expect(burgers.getByRole('heading', { level: 3 }).first()).toHaveText('Shami Burger');
+  const deals = page.getByRole('region', { name: 'Deals', exact: true });
+  await expect(deals.getByRole('heading', { level: 3 }))
+    .toHaveText(Array.from({ length: 12 }, (_, index) => `Deal ${index + 1}`));
+  await burgers.getByRole('button', { name: 'Edit Shami Burger', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Edit menu item' });
+  await dialog.getByLabel('Item name', { exact: true }).fill('ZZ Owner Burger');
+  await dialog.getByRole('button', { name: 'Save item', exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(burgers.getByRole('heading', { level: 3 }).first()).toHaveText('ZZ Owner Burger');
+  await page.reload();
+  await expect(burgers.getByRole('heading', { level: 3 }).first()).toHaveText('ZZ Owner Burger');
+  await page.getByLabel('Search items', { exact: true }).fill('shawarma');
+  await expect(headings).toHaveText(['Shawarmas']);
+  await expect(page.getByRole('article')).toHaveCount(2);
+  await page.getByLabel('Search items', { exact: true }).fill('');
+  await page.getByLabel('Category', { exact: true }).selectOption({ label: 'Deals' });
+  await expect(headings).toHaveText(['Deals']);
+  await expect(page.getByRole('article')).toHaveCount(12);
+});
+
 test('existing imported items can be edited offline and edits survive reload', async ({ page, context }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Manage menu' }).click();

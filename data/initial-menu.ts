@@ -3,7 +3,7 @@ import pizzas from './catalog/pizzas.json';
 import drinksAndDeals from './catalog/drinks-and-deals.json';
 import type { MenuItemInput, MenuVariant } from './menu-types';
 
-export type CatalogItem = Omit<MenuItemInput, 'categoryId'> & {
+export type CatalogItem = Omit<MenuItemInput, 'categoryId' | 'variants'> & {
   id: string;
   category: string;
   variants: MenuVariant[];

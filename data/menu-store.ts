@@ -18,7 +18,7 @@ interface ItemRow {
 export function createMenuStore(database: Database) {
   return {
     async listCategories(): Promise<Category[]> {
-      return database.query<Category>('SELECT id, name FROM categories ORDER BY name');
+      return database.query<Category>('SELECT id, name FROM categories ORDER BY sort_order, rowid');
     },
 
     async saveCategory(input: CategoryInput): Promise<Category> {
@@ -27,7 +27,8 @@ export function createMenuStore(database: Database) {
         name: requiredText(input.name, 'Category name'),
       };
       await database.write([{
-        statement: `INSERT INTO categories(id, name) VALUES (?, ?)
+        statement: `INSERT INTO categories(id, name, sort_order)
+          VALUES (?, ?, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM categories))
           ON CONFLICT(id) DO UPDATE SET name = excluded.name`,
         values: [category.id, category.name],
       }]);
@@ -43,7 +44,7 @@ export function createMenuStore(database: Database) {
           variant.price_paisa AS pricePaisa
         FROM menu_items AS item
         JOIN menu_variants AS variant ON variant.item_id = item.id
-        ORDER BY item.name, variant.price_paisa, variant.name
+        ORDER BY item.sort_order, item.rowid, variant.sort_order, variant.rowid
       `);
       const items = new Map<string, MenuItem>();
       for (const row of rows) {
@@ -81,7 +82,8 @@ export function createMenuStore(database: Database) {
       await database.write([
         {
           statement: `INSERT INTO menu_items(id, category_id, name, active, description,
-              premium_extra_required, premium_extra_paisa) VALUES (?, ?, ?, ?, ?, ?, ?)
+              premium_extra_required, premium_extra_paisa, sort_order)
+            VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM menu_items))
             ON CONFLICT(id) DO UPDATE SET category_id = excluded.category_id,
               name = excluded.name, active = excluded.active, description = excluded.description,
               premium_extra_required = excluded.premium_extra_required,
@@ -90,9 +92,9 @@ export function createMenuStore(database: Database) {
             Number(item.premiumExtraRequired), item.premiumExtraPaisa],
         },
         { statement: 'DELETE FROM menu_variants WHERE item_id = ?', values: [item.id] },
-        ...item.variants.map(variant => ({
-          statement: 'INSERT INTO menu_variants(id, item_id, name, price_paisa) VALUES (?, ?, ?, ?)',
-          values: [variant.id, item.id, variant.name, variant.pricePaisa],
+        ...item.variants.map((variant, index) => ({
+          statement: 'INSERT INTO menu_variants(id, item_id, name, price_paisa, sort_order) VALUES (?, ?, ?, ?, ?)',
+          values: [variant.id, item.id, variant.name, variant.pricePaisa, index],
         })),
       ]);
       return item;

@@ -11,6 +11,8 @@ section at a time: discuss, agree, build, test, then improve.
 - An Android project using Capacitor and its native SQLite plugin.
 - A versioned database for categories, menu items, and size-based prices.
 - The reviewed Master Foods menu: 52 items, 90 price choices, and 10 categories.
+- Menu sections follow the printed category/item order, with Deals 1–12 in
+  sequence. Editing names/prices keeps their position; new entries append.
 - A menu editor: search/filter, add items, edit existing names, sizes, prices,
   availability, deal contents, and premium extras. Categories can be added/renamed.
 - Data functions to list, add, and edit categories and menu items. Each item has

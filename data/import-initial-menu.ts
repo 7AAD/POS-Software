@@ -23,7 +23,8 @@ export async function importInitialMenu(database: Database): Promise<void> {
     const id = existing?.id ?? seedId;
     categoryIds.set(name, id);
     if (!existing) statements.push({
-      statement: 'INSERT INTO categories(id, name) VALUES (?, ?)', values: [id, name],
+      statement: `INSERT INTO categories(id, name, sort_order)
+        VALUES (?, ?, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM categories))`, values: [id, name],
     });
   }
 
@@ -35,12 +36,13 @@ export async function importInitialMenu(database: Database): Promise<void> {
         (existing.categoryId === categoryId && existing.name.toLowerCase() === item.name.toLowerCase()))) continue;
     statements.push({
       statement: `INSERT INTO menu_items(id, category_id, name, active, description,
-        premium_extra_required, premium_extra_paisa) VALUES (?, ?, ?, 1, ?, ?, NULL)`,
+        premium_extra_required, premium_extra_paisa, sort_order)
+        VALUES (?, ?, ?, 1, ?, ?, NULL, (SELECT COALESCE(MAX(sort_order), 0) + 1 FROM menu_items))`,
       values: [item.id, categoryId, item.name, item.description ?? '', Number(item.premiumExtraRequired ?? false)],
     });
-    for (const variant of item.variants) statements.push({
-      statement: 'INSERT INTO menu_variants(id, item_id, name, price_paisa) VALUES (?, ?, ?, ?)',
-      values: [variant.id, item.id, variant.name, variant.pricePaisa],
+    for (const [index, variant] of item.variants.entries()) statements.push({
+      statement: 'INSERT INTO menu_variants(id, item_id, name, price_paisa, sort_order) VALUES (?, ?, ?, ?, ?)',
+      values: [variant.id, item.id, variant.name, variant.pricePaisa, index],
     });
   }
   statements.push({ statement: 'INSERT INTO menu_imports(id) VALUES (?)', values: [initialMenuImportId] });
