@@ -5,17 +5,18 @@ import { AppIcon } from './AppIcon';
 interface MenuItemCardProps {
   item: MenuItem;
   categoryName: string;
-  onEdit(): void;
+  onEdit?(): void;
+  onSelect?(): void;
 }
 
-export function MenuItemCard({ item, categoryName, onEdit }: MenuItemCardProps) {
+export function MenuItemCard({ item, categoryName, onEdit, onSelect }: MenuItemCardProps) {
   return (
     <article className="menu-item" aria-label={item.name}>
       <div className="menu-item-heading">
         <div><p className="item-category">{categoryName}</p><h3>{item.name}</h3></div>
-        <button type="button" className="icon-button secondary" aria-label={`Edit ${item.name}`} onClick={onEdit}>
+        {onEdit && <button type="button" className="icon-button secondary" aria-label={`Edit ${item.name}`} onClick={onEdit}>
           <AppIcon name="edit" />
-        </button>
+        </button>}
       </div>
       {item.description && <p className="item-description">{item.description}</p>}
       <ul className="item-prices">
@@ -27,8 +28,12 @@ export function MenuItemCard({ item, categoryName, onEdit }: MenuItemCardProps) 
         {item.active ? 'Available' : 'Unavailable'}
       </span>
       {item.premiumExtraRequired && <p className="premium-note">
-        Premium extra: {item.premiumExtraPaisa == null ? 'amount not set' : formatPkr(item.premiumExtraPaisa)}
+        Premium extra per pizza: {item.premiumExtraPaisa == null ? 'amount not set' : formatPkr(item.premiumExtraPaisa)}
       </p>}
+      {onSelect && <button type="button" className="choose-item" disabled={!item.active}
+        aria-label={`Choose ${item.name}`} onClick={onSelect}><AppIcon name="plus" />
+        {item.active ? 'Add to order' : 'Unavailable'}
+      </button>}
     </article>
   );
 }

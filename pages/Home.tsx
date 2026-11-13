@@ -42,7 +42,10 @@ export function Home() {
                   <dd>{summary.items}</dd>
                 </div>
               </dl>
-              <a className="button-link" href="#menu"><AppIcon name="edit" />Manage menu</a>
+              <div className="home-actions">
+                <a className="button-link" href="#order"><AppIcon name="cart" />Take an order</a>
+                <a className="button-link secondary" href="#menu"><AppIcon name="edit" />Manage menu</a>
+              </div>
               {summary.items === 0 && (
                 <div className="empty-menu">
                   <span className="empty-icon"><AppIcon name="utensils" /></span>

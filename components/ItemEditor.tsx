@@ -4,16 +4,19 @@ import { menuErrorMessage } from '../data/menu-error';
 import { parsePkr, priceForInput } from '../data/money';
 import { Modal } from './Modal';
 import { AppIcon } from './AppIcon';
+import { OrderOptionsFields } from './OrderOptionsFields';
+import type { OrderOptions } from '../data/order-option-types';
 
 interface ItemEditorProps {
   item: MenuItem | null;
   categories: Category[];
   defaultCategoryId: string;
+  menuItems: MenuItem[];
   onSave(input: MenuItemInput): Promise<void>;
   onClose(): void;
 }
 
-export function ItemEditor({ item, categories, defaultCategoryId, onSave, onClose }: ItemEditorProps) {
+export function ItemEditor({ item, categories, defaultCategoryId, menuItems, onSave, onClose }: ItemEditorProps) {
   const formId = useId();
   const [name, setName] = useState(item?.name ?? '');
   const [categoryId, setCategoryId] = useState(item?.categoryId ?? defaultCategoryId);
@@ -21,6 +24,7 @@ export function ItemEditor({ item, categories, defaultCategoryId, onSave, onClos
   const [active, setActive] = useState(item?.active ?? true);
   const [premium, setPremium] = useState(item?.premiumExtraRequired ?? false);
   const [extra, setExtra] = useState(item?.premiumExtraPaisa == null ? '' : priceForInput(item.premiumExtraPaisa));
+  const [orderOptions, setOrderOptions] = useState<OrderOptions>(item?.orderOptions ?? { groups: [] });
   const nextKey = useRef(0);
   const [variants, setVariants] = useState(() => item?.variants.map(variant => ({
     id: variant.id as string | undefined, key: variant.id, name: variant.name, price: priceForInput(variant.pricePaisa),
@@ -41,6 +45,7 @@ export function ItemEditor({ item, categories, defaultCategoryId, onSave, onClos
         id: item?.id, name, categoryId, description, active,
         premiumExtraRequired: premium,
         premiumExtraPaisa: premium && extra.trim() ? parsePkr(extra) : null,
+        orderOptions: orderOptions.groups.length ? orderOptions : null,
         variants: variants.map(variant => ({ id: variant.id, name: variant.name, pricePaisa: parsePkr(variant.price) })),
       });
       setSaving(false); onClose();
@@ -95,9 +100,11 @@ export function ItemEditor({ item, categories, defaultCategoryId, onSave, onClos
               <label>Premium extra (Rs.)<input type="number" min="0.01" step="0.01"
                 inputMode="decimal" value={extra} aria-describedby={`${formId}-premium-help`}
                 onChange={event => setExtra(event.target.value)} /></label>
-              <p className="field-help" id={`${formId}-premium-help`}>Leave blank until the extra charge is confirmed.</p>
+              <p className="field-help" id={`${formId}-premium-help`}>Charged for each premium pizza in a deal.
+                Leave blank until confirmed; premium selections cannot be ordered without it.</p>
             </div>}
           </div>
+          <OrderOptionsFields value={orderOptions} menuItems={menuItems} onChange={setOrderOptions} />
         </fieldset>
         {error && <p role="alert" className="form-error">{error}</p>}
         <div className="form-actions">

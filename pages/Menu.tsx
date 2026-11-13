@@ -5,6 +5,8 @@ import { StatusCard } from '../components/StatusCard';
 import { CategoryEditor } from '../components/CategoryEditor';
 import { ItemEditor } from '../components/ItemEditor';
 import { MenuItemCard } from '../components/MenuItemCard';
+import { MenuFilters } from '../components/MenuFilters';
+import { filterMenu } from '../data/filter-menu';
 import { useMenuEditor } from '../data/use-menu-editor';
 import type { MenuItem, MenuItemInput } from '../data/menu-types';
 
@@ -15,11 +17,7 @@ export function Menu() {
   const [editor, setEditor] = useState<{ item: MenuItem | null } | null>(null);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [notice, setNotice] = useState('');
-  const visible = menu.items.filter(item => (!category || item.categoryId === category) &&
-    item.name.toLowerCase().includes(query.trim().toLowerCase()));
-  const groups = menu.categories.map(entry => ({
-    category: entry, items: visible.filter(item => item.categoryId === entry.id),
-  })).filter(group => group.items.length > 0);
+  const { visible, groups } = filterMenu(menu.items, menu.categories, query, category);
 
   async function saveItem(input: MenuItemInput) {
     await menu.saveItem(input);
@@ -43,20 +41,13 @@ export function Menu() {
         </StatusCard>}
         {!menu.loading && !menu.error && <>
           <div className="menu-toolbar">
+            <a className="button-link secondary" href="#order"><AppIcon name="cart" />Take an order</a>
             <button type="button" onClick={() => { setEditor({ item: null }); setNotice(''); }}
               disabled={menu.categories.length === 0}><AppIcon name="plus" />Add item</button>
             <button type="button" className="secondary" onClick={() => setCategoriesOpen(true)}>Categories</button>
           </div>
-          <div className="menu-filters">
-            <label>Search items<input type="search" placeholder="Search your menu" value={query}
-              onChange={event => setQuery(event.target.value)} /></label>
-            <div className="select-field"><label htmlFor="menu-category-filter">Category</label>
-              <select id="menu-category-filter" value={category} onChange={event => setCategory(event.target.value)}>
-              <option value="">All categories</option>
-              {menu.categories.map(entry => <option value={entry.id} key={entry.id}>{entry.name}</option>)}
-              </select>
-            </div>
-          </div>
+          <MenuFilters categories={menu.categories} query={query} categoryId={category}
+            onQueryChange={setQuery} onCategoryChange={setCategory} />
           <p className="menu-result-count">{visible.length} of {menu.items.length} items · {menu.categories.length} categories</p>
           {notice && <p role="status" className="save-notice">{notice}</p>}
           {visible.length === 0 && <div className="empty-menu">
@@ -81,6 +72,7 @@ export function Menu() {
         </>}
       </main>
       {editor && <ItemEditor item={editor.item} categories={menu.categories}
+        menuItems={menu.items}
         defaultCategoryId={category || menu.categories[0]?.id || ''} onSave={saveItem} onClose={() => setEditor(null)} />}
       {categoriesOpen && <CategoryEditor categories={menu.categories} onSave={menu.saveCategory}
         onClose={() => setCategoriesOpen(false)} />}

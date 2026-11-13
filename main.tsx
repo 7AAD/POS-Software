@@ -4,6 +4,7 @@ import { App } from './App';
 import './components/styles.css';
 import './components/menu.css';
 import './components/forms.css';
+import './components/order.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
