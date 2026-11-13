@@ -76,7 +76,8 @@ it('upgrades a version-three menu without altering stored owner data', async () 
   const before = await store.listMenuItems();
   await database.write([
     { statement: 'ALTER TABLE menu_items DROP COLUMN order_options_json', values: [] },
-    { statement: 'DELETE FROM schema_migrations WHERE version = 4', values: [] },
+      { statement: 'DROP TABLE open_orders', values: [] },
+      { statement: 'DELETE FROM schema_migrations WHERE version >= 4', values: [] },
   ]);
   await initializeSchema(database);
   await initializeSchema(database);
