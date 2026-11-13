@@ -56,6 +56,9 @@
 
 - Owner has full access. Cashier has limited operational access.
 - Receipt printer support is required.
+- Start with the on-screen receipt layout. Show the saved paid-order details,
+  choices, prices, payment method, received amount, and cash change. Printer
+  model, connection, and paper width will be chosen in a later section.
 - Both cloud backup and exported backup files, with restore support.
 - Authentication, PIN protection, backups, and printing are future features.
 
@@ -99,7 +102,10 @@ payment for the same order. Paid records cannot be reopened for editing.
 
 Checkout records financial payment; preparation/delivery tracking remains separate.
 No tax rate, discount, delivery charge, or premium amount has been invented.
-Add-ons, permissions, discounts, tax, receipts, and backups remain separate tasks.
+On-screen receipts use the immutable completed sale. They retain the original
+order number and paid time when reopened; viewing one creates no payment or
+new receipt number. Only the known shop name, Master Foods, is shown.
+Add-ons, permissions, discounts, tax, printer integration, and backups remain separate tasks.
 
 The owner requested Git separation through the final segment: keep work on
 `feature/order-taking`, commit completed stages, and leave merging to `main`

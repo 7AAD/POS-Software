@@ -15,6 +15,12 @@ test('the built checkout stores one paid sale at the repository path and restore
   await expect(payment).toContainText('Total paidRs. 140');
   await expect(page.getByRole('button', { name: 'Record payment', exact: true })).toHaveCount(0);
   expect(page.url()).toContain('/POS-Software/#sale/');
+  await page.getByRole('link', { name: 'View receipt', exact: true }).click();
+  await page.reload();
+  const receipt = page.getByRole('article', { name: 'Receipt for order #1', exact: true });
+  await expect(receipt.locator('.receipt-total')).toContainText('Rs. 140');
+  await expect(receipt.locator('.receipt-payment')).toContainText('ChangeRs. 60');
+  expect(page.url()).toContain('/POS-Software/#receipt/');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });

@@ -28,6 +28,7 @@ if you changed your menu, use the total shown by your app.
 7. Record payment. Reopen its completed sale and check the method/reference.
 8. Open a completed order's old checkout screen: it should show the existing
    payment and have no Record payment button. A paid order cannot be charged again.
+9. Choose View receipt to review the customer receipt from that same saved sale.
 
 Restore any test menu edits afterward. Example premium extras used in tests are
 not defaults or agreed selling fees; configure your actual extra in Menu.
@@ -58,7 +59,8 @@ snapshots, method, received amount, cash change, reference, and paid time.
 Payment may be recorded before or after preparing the food; this section records
 financial payment and does not mark food prepared or delivered.
 
-Receipts/printer integration, split/partial payments, refunds, discounts, tax,
+On-screen receipts are available from the completed sale. Printer integration,
+split/partial payments, refunds, discounts, tax,
 delivery charges, staff permissions, and advanced history reports remain future
 tasks. No provider connection, bank credentials, fees, or tax rates are assumed.
 Android stores records in native SQLite. The browser preview retains its existing

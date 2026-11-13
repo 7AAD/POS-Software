@@ -36,6 +36,8 @@ section at a time: discuss, agree, build, test, then improve.
   Cash calculates change; digital receipts require the cashier's confirmation.
 - Paid orders keep a read-only completed sale with all item choices, prices,
   customer details, payment amounts, references, and time. Reopen it after restart.
+- An on-screen customer receipt: open View receipt from a completed sale. It uses
+  the recorded items, sizes, choices, instructions, payment, and cash change.
 
 The reviewed menu imports once per device. Existing owner entries win when
 names match, and later edits are never reset by reopening or updating the app.
@@ -51,6 +53,7 @@ discounts, tax, and backups remain future tasks.
 See the [order-taking checks](docs/order-taking.md) and
 [saved-order test steps](docs/open-orders.md).
 See [checkout and payment checks](docs/checkout.md) for the payment flow.
+See the [receipt layout and checks](docs/receipts.md) for on-screen receipts.
 See [the agreed requirements](docs/requirements.md) for the longer-term scope.
 
 ## Git work in progress
@@ -64,6 +67,8 @@ The completed previous section is saved at Git tag
 [`checkpoint/order-taking-efd3b23`](https://github.com/7AAD/POS-Software/tree/checkpoint/order-taking-efd3b23).
 The open-orders section is preserved at
 [`checkpoint/open-orders-cb22f0d`](https://github.com/7AAD/POS-Software/tree/checkpoint/open-orders-cb22f0d).
+The checkout section is preserved at
+[`checkpoint/checkout-6515a76`](https://github.com/7AAD/POS-Software/tree/checkpoint/checkout-6515a76).
 
 ## Run the development version
 
@@ -165,7 +170,7 @@ data removes it. No cloud or file backups exist yet.
 - `index.html` and `main.tsx`: start React and open the home screen.
 - `App.tsx`: selects each screen by hash navigation and keeps the working draft.
 - `pages/`: Home, Menu, POS, Open Orders, Checkout, Paid Orders, and the completed
-  Sale view. Each screen has its own file.
+  Sale and Receipt views. Each screen has its own file.
 - `components/`: shared UI and styling, including `StatusCard.tsx` and `styles.css`.
 - `data/`: all loading and saving logic. `schema.ts` defines the database;
   `menu-store.ts` provides menu operations; `money.ts` handles PKR conversion.
@@ -181,6 +186,8 @@ data removes it. No cloud or file backups exist yet.
   `payment-validation.ts` checks received amounts, change, and digital confirmation.
 - `components/OrderReview.tsx`, `OrderLineDetails.tsx`, and `SaleSummary.tsx`:
   shared order and payment details for checkout and completed sales.
+- `components/ReceiptDocument.tsx` and `receipt.css`: the responsive receipt paper;
+  `pages/Receipt.tsx` opens its saved sale using the existing data layer.
 - `data/catalog/`: the reviewed initial menu. `import-initial-menu.ts` saves it
   atomically once per database; `menu-source.csv` records the photo transcription.
 - `tests/data/`: tests the actual schema, menu rules, persistence, and PKR amounts.
@@ -227,8 +234,9 @@ Discuss each feature before starting it. One numbered feature per Codex task:
 6. [ ] Discounts: owner-approved item or menu-wide promotions, with no stacking.
 7. [ ] Tax settings: optional Punjab tax applied after discounts, using verified rules.
 8. [x] Checkout and payments: Cash, JazzCash, Easypaisa, and bank transfer.
-9. [ ] Receipts: print completed orders using the chosen printer connection.
-10. [ ] Sales history: filtering and reporting; a basic paid-order list now works.
-11. [ ] File backups: export and safely restore the local database.
-12. [ ] Cloud backups: back up and restore when connected.
-13. [ ] Daily report: summarize sales and transaction counts.
+9. [x] On-screen receipts: review the receipt for a completed sale.
+10. [ ] Receipt printing: connect the chosen printer and paper width.
+11. [ ] Sales history: filtering and reporting; a basic paid-order list now works.
+12. [ ] File backups: export and safely restore the local database.
+13. [ ] Cloud backups: back up and restore when connected.
+14. [ ] Daily report: summarize sales and transaction counts.

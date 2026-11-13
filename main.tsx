@@ -8,6 +8,7 @@ import './components/order.css';
 import './components/navigation.css';
 import './components/saved-orders.css';
 import './components/checkout.css';
+import './components/receipt.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

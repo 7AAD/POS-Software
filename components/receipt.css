@@ -1,0 +1,48 @@
+.receipt-shell { max-width: 560px; }
+.receipt-paper {
+  margin: 0 auto;
+  width: 100%;
+  padding: 24px;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid var(--orange);
+  border-radius: 12px;
+  background: #fffdf8;
+  color: #17202d;
+  box-shadow: 0 12px 32px #0003;
+  overflow-wrap: anywhere;
+}
+.receipt-brand { text-align: center; padding-bottom: 22px; border-bottom: 1px dashed #b4bdc8; }
+.receipt-logo { display: grid; place-items: center; width: 42px; height: 42px; margin: 0 auto 10px; background: var(--orange); border-radius: 12px; color: #17202d; }
+.receipt-brand h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.02em; }
+.receipt-brand p { margin: 5px 0 0; font-size: 12px; color: #526070; }
+.receipt-order-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding-top: 18px; }
+.receipt-order-heading h3 { margin: 0; font-size: 18px; }
+.receipt-paid { color: #166534; background: #dcfce7; padding: 4px 9px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; }
+.receipt-metadata, .receipt-payment { display: grid; gap: 9px; margin: 16px 0 0; }
+.receipt-metadata > div, .receipt-payment > div { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 5px 12px; min-width: 0; }
+.receipt-metadata dt, .receipt-payment dt { color: #526070; font-size: 12px; }
+.receipt-metadata dd, .receipt-payment dd { max-width: 100%; margin: 0; font-size: 12px; text-align: right; }
+.receipt-items { list-style: none; margin: 20px 0 0; padding: 0; }
+.receipt-item { padding: 16px 0; border-top: 1px dashed #b4bdc8; }
+.receipt-item-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 12px; }
+.receipt-item-heading h4 { margin: 0; font-size: 14px; min-width: 0; flex: 1; }
+.receipt-item-heading strong { font-size: 14px; max-width: 100%; }
+.receipt-item-size { margin: 6px 0 0; font-size: 12px; color: #526070; }
+.receipt-paper .cart-contents, .receipt-paper .cart-choices, .receipt-paper .cart-instructions { color: #526070; font-size: 12px; }
+.receipt-paper .cart-contents { margin-bottom: 8px; }
+.receipt-paper .cart-choices { margin-block: 8px; }
+.receipt-paper .premium-note { color: #9a3412; font-size: 12px; margin-top: 8px; }
+.receipt-paper .cart-instructions { border-left-color: #c2410c; }
+.receipt-total { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; padding-top: 18px; border-top: 2px solid #17202d; font-size: 19px; font-weight: 750; }
+.receipt-total strong { color: #9a3412; max-width: 100%; font-size: 25px; }
+.receipt-payment { padding-top: 16px; }
+.receipt-payment dd { font-weight: 650; }
+.receipt-footer { border-top: 1px dashed #b4bdc8; margin-top: 24px; padding-top: 18px; text-align: center; }
+.receipt-footer p { margin: 0; font-size: 13px; font-weight: 650; }
+.receipt-footer span { display: block; margin-top: 5px; font-size: 11px; color: #526070; }
+.receipt-back { margin-top: 20px; }
+
+@media (max-width: 359px) {
+  .receipt-paper { padding: 18px; }
+  .receipt-brand h2 { font-size: 20px; }
+}

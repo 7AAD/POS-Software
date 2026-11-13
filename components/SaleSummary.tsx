@@ -21,7 +21,9 @@ export function SaleSummary({ sale, onNew, alreadyRecorded = false }: {
         </dl>
         <p className="saved-order-time">{new Date(sale.paidAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</p>
         <p className="field-help">Saved on this device. This completed sale is read-only.</p>
-        <div className="payment-actions"><button type="button" onClick={onNew}><AppIcon name="plus" />New order</button>
+        <div className="payment-actions">
+          <a className="button-link" href={`#receipt/${encodeURIComponent(sale.id)}`}>View receipt</a>
+          <button type="button" className="secondary" onClick={onNew}><AppIcon name="plus" />New order</button>
           <a className="button-link secondary" href="#sales">Paid orders</a></div>
       </section>
     </div>

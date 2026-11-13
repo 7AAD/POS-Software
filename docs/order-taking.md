@@ -70,7 +70,8 @@ unfinished and has not been paid or completed.
 
 Saved open orders survive closing or reloading; reopen them from Orders. Unsaved
 drafts and edits stay in memory, and browsers warn before leaving where supported.
-Checkout supports the four agreed payment methods. Receipts, discounts, tax,
+Checkout supports the four agreed payment methods and an on-screen paid receipt.
+Printer integration, discounts, tax,
 delivery charges, addresses, and staff access remain future tasks. Native behavior
 still needs a test on the shop's Android phone.
 

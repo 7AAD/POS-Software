@@ -10,6 +10,7 @@ import { useOrderNavigation } from './data/use-order-navigation';
 import { Checkout } from './pages/Checkout';
 import { PaidOrders } from './pages/PaidOrders';
 import { Sale } from './pages/Sale';
+import { Receipt } from './pages/Receipt';
 
 export function App() {
   const cart = useOrderCart();
@@ -24,13 +25,14 @@ export function App() {
   let recordId = '';
   try { recordId = decodeURIComponent(hash.slice(route.length + 1)); } catch { /* The page shows a missing-record state. */ }
   const active = route === '#menu' ? 'menu' : route === '#order' ? 'order' : route === '#checkout' ? 'checkout' :
-    route === '#orders' ? 'orders' : route === '#sales' ? 'sales' : route === '#sale' ? 'sale' : 'home';
+    route === '#orders' ? 'orders' : route === '#sales' ? 'sales' : route === '#sale' ? 'sale' : route === '#receipt' ? 'receipt' : 'home';
   return <>
     {active === 'menu' ? <Menu /> : active === 'order' ? <Order cart={cart} onNew={navigation.requestNew} /> :
       active === 'orders' ? <OpenOrders cart={cart} navigation={navigation} /> : active === 'sales' ? <PaidOrders /> :
         active === 'checkout' ? <Checkout key={recordId} orderId={recordId} cart={cart} onNew={navigation.requestNew} /> :
-          active === 'sale' ? <Sale key={recordId} saleId={recordId} onNew={navigation.requestNew} /> : <Home />}
-    <BottomNavigation busy={cart.busy} active={active === 'checkout' ? 'order' : active === 'sale' || active === 'sales' ? 'orders' : active} />
+          active === 'sale' ? <Sale key={recordId} saleId={recordId} onNew={navigation.requestNew} /> :
+            active === 'receipt' ? <Receipt key={recordId} saleId={recordId} /> : <Home />}
+    <BottomNavigation busy={cart.busy} active={active === 'checkout' ? 'order' : active === 'sale' || active === 'sales' || active === 'receipt' ? 'orders' : active} />
     <OrderSwitchDialog cart={cart} navigation={navigation} />
   </>;
 }
