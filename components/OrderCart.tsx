@@ -46,6 +46,7 @@ export function OrderCart({ cart }: { cart: OrderCartState }) {
       </>}
       {clearing && <Modal title="Clear this order?" onClose={() => setClearing(false)}>
         <p>Remove every item and the customer details from this draft?</p>
+        {cart.activeOrder && <p className="field-help">The saved order stays in Orders.</p>}
         <div className="form-actions">
           <button type="button" className="secondary" onClick={() => setClearing(false)}>Keep order</button>
           <button type="button" onClick={() => { cart.clear(); setError(''); setClearing(false); }}>Clear order</button>

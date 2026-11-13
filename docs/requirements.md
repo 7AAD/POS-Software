@@ -80,10 +80,16 @@ quantities, exact totals, and optional customer/table details. It keeps a snapsh
 of each added item's name, price, contents, and chosen options. Matching lines
 combine only when these snapshots and instructions are identical.
 
-Current drafts stay through in-app navigation, but are not saved across closing
-or reloading. Persistent open orders, add-ons, permissions, discounts, tax,
-checkout, and backups remain separate tasks. Future order records must retain
-the same snapshots so menu edits cannot rewrite past sales.
+Save order stores the full unfinished order on this device, including customer
+details and sale-time names, prices, choices, and instructions. Orders can be
+reopened after restarting and edited without changing their order number.
+Save changes updates that order; New order starts a separate draft. Switching
+offers save, discard, or keep editing when needed. Clearing a working cart keeps
+the saved copy. Successful storage commits alone mark the current copy saved.
+
+Unsaved drafts and edits remain in memory. Open orders are not paid/completed
+sales. Add-ons, permissions, discounts, tax, checkout, and backups remain separate
+tasks. Future sales records must retain the same snapshots.
 
 The owner requested Git separation through the final segment: keep work on
 `feature/order-taking`, commit completed stages, and leave merging to `main`

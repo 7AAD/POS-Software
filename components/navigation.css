@@ -1,3 +1,4 @@
+html { scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
 .app-shell { padding-bottom: max(104px, calc(env(safe-area-inset-bottom) + 88px)); }
 .bottom-navigation {
   position: fixed;

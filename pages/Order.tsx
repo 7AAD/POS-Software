@@ -6,16 +6,16 @@ import { Modal } from '../components/Modal';
 import { OrderCart } from '../components/OrderCart';
 import { OrderDetailsFields } from '../components/OrderDetailsFields';
 import { OrderItemDialog } from '../components/OrderItemDialog';
+import { OrderSaveBar } from '../components/OrderSaveBar';
 import { SelectionTabs } from '../components/SelectionTabs';
 import { StatusCard } from '../components/StatusCard';
 import { filterMenu } from '../data/filter-menu';
 import type { MenuItem } from '../data/menu-types';
-import { formatPkr } from '../data/money';
 import type { OrderDetails } from '../data/order-types';
 import { useMenuEditor } from '../data/use-menu-editor';
 import type { OrderCartState } from '../data/use-order-cart';
 
-export function Order({ cart }: { cart: OrderCartState }) {
+export function Order({ cart, onNew }: { cart: OrderCartState; onNew(): void }) {
   const menu = useMenuEditor();
   const viewport = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
@@ -30,10 +30,13 @@ export function Order({ cart }: { cart: OrderCartState }) {
   return (
     <div className="app-shell order-shell">
       <AppHeader compact action={<button type="button" className="icon-button secondary customer-button"
-        aria-label="Customer and table details" onClick={() => setDetailsOpen(true)}><AppIcon name="customer" /></button>} />
+        aria-label="Customer and table details" disabled={cart.busy} onClick={() => setDetailsOpen(true)}><AppIcon name="customer" /></button>} />
       <main>
+        <fieldset className="order-workspace" disabled={cart.busy} aria-busy={cart.busy}>
         <div className="order-title-row">
-          <h1>New Order</h1><span className="draft-badge">Draft</span>
+          <h1>{cart.activeOrder ? `Order #${cart.activeOrder.number}` : 'New Order'}</h1>
+          <span className={`draft-badge${cart.dirty ? ' unsaved-badge' : ''}`}>
+            {cart.activeOrder ? cart.dirty ? 'Unsaved' : 'Saved' : 'Draft'}</span>
           <button type="button" className="icon-button search-toggle secondary" aria-label="Search menu"
             aria-expanded={searchOpen} aria-controls="order-search" onClick={() => {
               setSearchOpen(previous => !previous); setQuery('');
@@ -72,14 +75,10 @@ export function Order({ cart }: { cart: OrderCartState }) {
           </div>
           <div className="order-summary">
             <OrderCart cart={cart} />
-            <button type="button" className="order-review" disabled={cart.lines.length === 0} onClick={() => {
-              const target = document.getElementById('current-order');
-              target?.focus({ preventScroll: true });
-              target?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'nearest' });
-            }}>Review order · {formatPkr(cart.totalPaisa)}</button>
-            <p className="order-draft-note">Draft only · closing or reloading clears this order.</p>
+            <OrderSaveBar cart={cart} onNew={onNew} />
           </div>
         </div>
+        </fieldset>
       </main>
       {detailsOpen && <Modal title="Customer and table details" onClose={() => setDetailsOpen(false)}>
         <OrderDetailsFields value={cart.details} onChange={cart.setDetails} />

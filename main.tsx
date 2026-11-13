@@ -6,6 +6,7 @@ import './components/menu.css';
 import './components/forms.css';
 import './components/order.css';
 import './components/navigation.css';
+import './components/saved-orders.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

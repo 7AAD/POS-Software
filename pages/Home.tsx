@@ -44,6 +44,7 @@ export function Home() {
               </dl>
               <div className="home-actions">
                 <a className="button-link" href="#order"><AppIcon name="cart" />Take an order</a>
+                <a className="button-link secondary" href="#orders"><AppIcon name="clock" />Open orders</a>
                 <a className="button-link secondary" href="#menu"><AppIcon name="edit" />Manage menu</a>
               </div>
               {summary.items === 0 && (

@@ -15,8 +15,8 @@ The POS screen follows the compact reference: Dine-in/Takeaway/Delivery tabs,
 category chips, two-column food cards, and Current Order below the menu on phones.
 Scroll the cards to find more items. The header's search button searches the whole
 menu; its person button opens customer and table details. Bottom navigation opens
-Home, POS, and Menu. Review order focuses the cart and shows its total; payment
-comes in the checkout segment.
+Home, POS, Orders, and Menu. Save order keeps the cart on this device;
+payment comes in the checkout segment. See [saving and reopening orders](open-orders.md).
 
 1. Choose Shami Burger, add an instruction, and increase quantity to two.
    The total should be Rs. 280. Add the same selection/instruction again:
@@ -40,7 +40,8 @@ comes in the checkout segment.
    details. After loading the app, these order interactions also work offline.
 
 Use a test browser/profile or restore test menu prices and availability afterward.
-Menu settings are saved; a draft cart is not a completed or saved order.
+Menu settings are saved; tap Save order to keep a cart. A saved open order is
+unfinished and has not been paid or completed.
 
 ## Pricing and choices
 
@@ -66,11 +67,10 @@ Menu settings are saved; a draft cart is not a completed or saved order.
 
 ## Current limits
 
-The draft stays in memory through Home/Menu/Order navigation. Closing the app or
-reloading clears it; browsers warn before leaving a nonempty cart where supported.
-There is no saved-order list, payment, receipt, discount, tax, delivery charge,
-address collection, or staff access control in this segment. Those come in their
-own tasks. Native behavior still needs a test on the shop's Android phone.
+Saved open orders survive closing or reloading; reopen them from Orders. Unsaved
+drafts and edits stay in memory, and browsers warn before leaving where supported.
+Payment, receipts, discounts, tax, delivery charges, addresses, and staff access
+remain future tasks. Native behavior still needs a test on the shop's Android phone.
 
 ## Automated checks
 
