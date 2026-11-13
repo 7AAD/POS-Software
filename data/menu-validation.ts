@@ -1,0 +1,34 @@
+import type { MenuItemInput } from './menu-types';
+
+export function requiredText(value: string, label: string): string {
+  if (typeof value !== 'string' || !value.trim() || value.trim().length > 100) {
+    throw new Error(`${label} must contain 1–100 characters.`);
+  }
+  return value.trim();
+}
+
+export function validateMenuItem(input: MenuItemInput): void {
+  requiredText(input.name, 'Item name');
+  requiredText(input.categoryId, 'Category');
+  if (input.active !== undefined && typeof input.active !== 'boolean') {
+    throw new Error('Item availability must be true or false.');
+  }
+  if (!Array.isArray(input.variants) || input.variants.length === 0) {
+    throw new Error('Add at least one size and price. Use Regular for an item with one price.');
+  }
+  const names = new Set<string>();
+  const ids = new Set<string>();
+  for (const variant of input.variants) {
+    const name = requiredText(variant.name, 'Size name').toLowerCase();
+    if (names.has(name)) throw new Error('Size names must be unique within an item.');
+    names.add(name);
+    if (variant.id !== undefined) {
+      const id = requiredText(variant.id, 'Size ID');
+      if (ids.has(id)) throw new Error('Size IDs must be unique within an item.');
+      ids.add(id);
+    }
+    if (!Number.isSafeInteger(variant.pricePaisa) || variant.pricePaisa < 0) {
+      throw new Error('Prices must be non-negative whole paisa amounts.');
+    }
+  }
+}

@@ -1,0 +1,184 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #fff;
+  background: #101722;
+  line-height: 1.5;
+  color-scheme: dark;
+  --card: #1d2736;
+  --surface: #253143;
+  --border: #334155;
+  --orange: #f97316;
+  --soft-orange: #fb923c;
+  --muted: #94a3b8;
+  --supporting: #cbd5e1;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+svg { display: block; flex-shrink: 0; }
+
+.app-shell {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(32px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--orange);
+  color: #101722;
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.brand-subtitle {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.page-heading { padding: 32px 0 28px; }
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--soft-orange);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(30px, 7.5vw, 40px);
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.accent { color: var(--orange); }
+.page-description {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.status-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+}
+
+.card-heading { display: flex; align-items: center; gap: 10px; }
+.card-heading h2 { margin: 0; font-size: 17px; font-weight: 650; }
+.status-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #213d35;
+  color: #86efac;
+  flex-shrink: 0;
+}
+
+.status-icon svg { width: 17px; height: 17px; }
+.status-card--error .status-icon { background: #4b2934; color: #fda4af; }
+.status-card--loading .status-icon { background: var(--surface); color: var(--soft-orange); }
+.card-description { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
+
+.menu-counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.menu-stat {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.stat-icon { display: block; margin-bottom: 18px; color: var(--soft-orange); }
+.stat-icon svg { width: 21px; height: 21px; }
+.menu-counts dt { color: var(--supporting); font-size: 13px; }
+.menu-counts dd {
+  margin: 4px 0 0;
+  font-size: 32px;
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.empty-menu {
+  padding: 24px 12px;
+  border: 1px dashed #45536a;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--soft-orange);
+}
+
+.empty-menu h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.empty-menu p { max-width: 290px; margin: 8px auto 0; font-size: 13px; color: var(--muted); }
+.device-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 20px 0 0;
+  color: var(--supporting);
+  font-size: 12px;
+}
+
+.device-note svg { width: 17px; height: 17px; color: var(--muted); }
+button {
+  min-width: 48px;
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #101722;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:hover, button:active { background: var(--soft-orange); }
+button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+
+@media (min-width: 600px) {
+  .app-shell { padding-top: 40px; }
+  .page-heading { padding-top: 40px; }
+  .status-card { padding: 28px; }
+}

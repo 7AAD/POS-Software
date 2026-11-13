@@ -1,0 +1,2 @@
+# Store the Windows Gradle launcher as text; check it out with Windows line endings.
+*.bat text eol=crlf

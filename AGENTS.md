@@ -1,0 +1,6 @@
+- Keep this app organized so a beginner can read it.
+- Screens go in `pages/` (one file per screen).
+- Shared UI pieces go in `components/` (single copy used everywhere).
+- Saving, loading, and API logic go in `data/`.
+- One job per file. Never let any file exceed 300 lines.
+- Before creating a new component or function, always check `components/` and `data/` to see if one already exists.
